@@ -51,7 +51,8 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden;transition:background .25s,color .25s}
 
 /* ══ LAYOUT ══════════════════════════════════ */
-.app{display:grid;grid-template-columns:272px 1fr;grid-template-rows:60px 1fr;grid-template-areas:"hdr hdr" "sb main";height:100vh}
+.app{display:grid;grid-template-columns:272px 1fr;grid-template-rows:60px 1fr;grid-template-areas:"hdr hdr" "sb main";height:100vh;transition:grid-template-columns .25s}
+.app.sb-collapsed{grid-template-columns:0px 1fr}
 
 /* ══ HEADER ══════════════════════════════════ */
 header{grid-area:hdr;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
@@ -129,7 +130,12 @@ header{grid-area:hdr;background:var(--surface);border-bottom:1px solid var(--bor
 .version{font-family:var(--font-m);font-size:10px;color:var(--text-3);padding:3px 8px;border:1px solid var(--border);letter-spacing:1px}
 
 /* ══ SIDEBAR ══════════════════════════════════ */
-aside{grid-area:sb;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;overflow-x:hidden}
+aside{grid-area:sb;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;overflow-x:hidden;transition:width .25s,opacity .25s;width:272px;min-width:0}
+.app.sb-collapsed aside{width:0;opacity:0;pointer-events:none;border-right:none}
+.sb-toggle{width:28px;height:28px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.sb-toggle:hover{border-color:var(--red);color:var(--red)}
+.sb-toggle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;transition:transform .25s}
+.app.sb-collapsed .sb-toggle svg{transform:rotate(180deg)}
 aside::-webkit-scrollbar{width:4px}
 aside::-webkit-scrollbar-thumb{background:var(--border)}
 
@@ -412,6 +418,7 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 
   <!-- HEADER -->
   <header>
+    <button class="sb-toggle" id="sb-toggle" onclick="toggleSidebar()" title="Colapsar sidebar"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
     <div class="logo-mark">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     </div>
@@ -549,6 +556,10 @@ function asignadoBadgeInline(r){
   return '<span class="nav-badge assigned">OK</span>';
 }
 
+function toggleSidebar(){
+  document.querySelector('.app').classList.toggle('sb-collapsed');
+}
+
 function toggleTheme(){
   const d=document.documentElement,dark=d.getAttribute('data-theme')==='dark';
   d.setAttribute('data-theme',dark?'light':'dark');
@@ -593,16 +604,47 @@ function switchView(v){
 
 function buildOrg(){
   const vl=()=>`<div class="org-vline"><div class="org-vline-inner"></div></div>`;
-  const nodeHtml=r=>`
+
+  // nodeHtml: recibe un role object (puede ser uno de los "extras" con titulo distinto)
+  const nodeHtml=(r,asignadoLabel='')=>`
     <div class="org-node ${currentRole===r.id_rol?'active':''}" id="node-${r.id_rol}" onclick="selectRole('${r.id_rol}')">
       <div class="org-node-title">${r.titulo}</div>
       <div class="org-node-area">${r.area}</div>
-      ${asignadoBadgeNode(r)}
+      ${modoObra?(asignadoLabel
+        ?`<span class="org-node-asignado assigned">${asignadoLabel}</span>`
+        :`<span class="org-node-asignado tbd">TBD</span>`)
+      :''}
     </div>`;
+
+  // Para un id_rol con múltiples instancias, genera N nodos apilados verticalmente
+  // cada uno con su título y asignado propio
+  function nodesForId(id){
+    const r=rolesById[id]; if(!r)return '';
+    // instancias: si hay asignados, un nodo por asignado; sino, un nodo TBD
+    if(!modoObra || !r.asignados || r.asignados.length===0){
+      return nodeHtml(r,'');
+    }
+    if(r.asignados.length===1){
+      // titulo puede venir de r.titulosExtra[0] si existe, sino r.titulo
+      const tit=r.titulosExtra&&r.titulosExtra[0]?r.titulosExtra[0]:r.titulo;
+      const rCopy=Object.assign({},r,{titulo:tit});
+      return nodeHtml(rCopy, r.asignados[0]);
+    }
+    // Múltiples: apilar verticalmente
+    let h='<div style="display:flex;flex-direction:column;align-items:center;gap:6px">';
+    r.asignados.forEach((nombre,i)=>{
+      const tit=i===0?r.titulo:(r.titulosExtra&&r.titulosExtra[i-1]?r.titulosExtra[i-1]:r.titulo);
+      const rCopy=Object.assign({},r,{titulo:tit});
+      h+=nodeHtml(rCopy, nombre);
+    });
+    h+='</div>';
+    return h;
+  }
+
   function sub(id,gap=12){
     const r=rolesById[id]; if(!r)return '';
     const ch=getSubs(id);
-    let h=`<div style="display:flex;flex-direction:column;align-items:center">${nodeHtml(r)}`;
+    let h=`<div style="display:flex;flex-direction:column;align-items:center">${nodesForId(id)}`;
     if(ch.length){
       h+=vl();
       if(ch.length===1){h+=sub(ch[0].id_rol,gap);}
@@ -615,6 +657,7 @@ function buildOrg(){
     }
     return h+`</div>`;
   }
+
   const roots=ROLES.filter(r=>r.reporta_a_id==='gerente_operaciones');
   const label=modoObra?`Obra ${obraActual} - ${ROLES.length} Puestos`:`${ROLES.length} Puestos`;
   let h=`<div class="org-title">Estructura Organizacional - ${label}</div>`;
