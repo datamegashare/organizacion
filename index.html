@@ -65,6 +65,9 @@ header{grid-area:hdr;background:var(--surface);border-bottom:1px solid var(--bor
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px}
 
+/* Obra badge en header */
+.hdr-obra{font-family:var(--font-m);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--red);color:var(--red);background:var(--red-light)}
+
 .search-wrap{position:relative}
 .search-wrap svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;stroke:var(--text-3);fill:none;stroke-width:2}
 #search{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-b);font-size:13px;padding:6px 10px 6px 30px;width:190px;outline:none;transition:border-color .2s,width .2s}
@@ -109,22 +112,43 @@ aside::-webkit-scrollbar-thumb{background:var(--border)}
 .nav-area{font-size:10px;color:var(--text-3);font-family:var(--font-m)}
 .no-results{padding:24px 16px;text-align:center;font-family:var(--font-m);font-size:11px;color:var(--text-3);letter-spacing:1px}
 
+/* Badge asignado en sidebar */
+.nav-badge{font-family:var(--font-m);font-size:9px;padding:2px 6px;border-radius:0;flex-shrink:0}
+.nav-badge.assigned{background:#16a34a;color:white}
+.nav-badge.tbd{background:#ca8a04;color:white}
+
 /* ══ MAIN ══════════════════════════════════════ */
 main{grid-area:main;overflow-y:auto;overflow-x:hidden}
 main::-webkit-scrollbar{width:6px}
 main::-webkit-scrollbar-thumb{background:var(--border)}
+
+/* ══ LOADING STATE ══════════════════════════════ */
+#loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;padding:40px}
+.loading-spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:var(--font-m);font-size:11px;color:var(--text-3);letter-spacing:2px;text-transform:uppercase}
+
+/* ══ ERROR STATE ══════════════════════════════ */
+#error-state{display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;padding:40px;text-align:center}
+#error-state .error-icon{font-size:32px}
+#error-state .error-title{font-family:var(--font-d);font-size:28px;letter-spacing:3px;color:var(--red)}
+#error-state .error-msg{font-family:var(--font-m);font-size:11px;color:var(--text-3);letter-spacing:1px;max-width:400px;line-height:1.8}
 
 /* ══ ORG VIEW ══════════════════════════════════ */
 #view-org{padding:24px 28px;min-height:100%;overflow-x:auto}
 .org-title{font-family:var(--font-m);font-size:10px;letter-spacing:3px;color:var(--text-3);text-transform:uppercase;margin-bottom:24px}
 
 /* Nodos */
-.org-node{background:var(--node-bg);border:1px solid var(--node-border);padding:10px 13px;min-width:140px;max-width:175px;cursor:pointer;transition:all .18s;text-align:center;box-shadow:var(--shadow-sm);position:relative;user-select:none}
+.org-node{background:var(--node-bg);border:1px solid var(--node-border);padding:10px 13px;min-width:140px;max-width:185px;cursor:pointer;transition:all .18s;text-align:center;box-shadow:var(--shadow-sm);position:relative;user-select:none}
 .org-node:hover{border-color:var(--red-dim);box-shadow:var(--shadow-md);transform:translateY(-1px)}
 .org-node.active{border-color:var(--red);box-shadow:0 0 0 1px var(--red),var(--shadow-md)}
 .org-node.active::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:2px;background:var(--red)}
 .org-node-title{font-weight:600;font-size:12px;color:var(--text);line-height:1.3;margin-bottom:2px}
 .org-node-area{font-family:var(--font-m);font-size:10px;color:var(--text-3)}
+.org-node-asignado{font-family:var(--font-m);font-size:9px;margin-top:5px;padding:2px 6px;display:inline-block}
+.org-node-asignado.assigned{background:#16a34a;color:white}
+.org-node-asignado.tbd{background:#ca8a04;color:white}
+.org-node-extra{font-family:var(--font-m);font-size:9px;color:var(--text-3);margin-top:2px}
 
 /* Nodo raíz externo */
 .org-root-node{background:var(--surface2);border:1px dashed var(--border-s);padding:8px 20px;font-family:var(--font-m);font-size:10px;color:var(--text-3);letter-spacing:1px;text-transform:uppercase}
@@ -147,6 +171,10 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 .lc-title{font-family:var(--font-d);font-size:20px;letter-spacing:2px;color:var(--text);line-height:1.1;margin-bottom:5px}
 .lc-rep{font-size:12px;color:var(--text-3)}
 .lc-preview{margin-top:9px;padding-top:9px;border-top:1px solid var(--border);font-size:11px;color:var(--text-3);line-height:1.5}
+/* Badge asignado en list-card */
+.lc-badge{display:inline-block;font-family:var(--font-m);font-size:9px;padding:2px 7px;margin-top:7px}
+.lc-badge.assigned{background:#16a34a;color:white}
+.lc-badge.tbd{background:#ca8a04;color:white}
 
 /* ══ DETAIL VIEW ══════════════════════════════ */
 #view-detail{display:none;padding:32px 38px;max-width:960px}
@@ -162,6 +190,13 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 .detail-rep{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-3)}
 .detail-rep-link{color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .detail-rep-link:hover{color:var(--red-dim)}
+
+/* Asignados en detalle */
+.detail-asignados{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.detail-asig-label{font-family:var(--font-m);font-size:10px;letter-spacing:1px;color:var(--text-3);text-transform:uppercase}
+.detail-asig-chip{font-family:var(--font-m);font-size:11px;padding:3px 10px;border:1px solid}
+.detail-asig-chip.assigned{border-color:#16a34a;color:#16a34a;background:rgba(22,163,74,.07)}
+.detail-asig-chip.tbd{border-color:#ca8a04;color:#ca8a04;background:rgba(202,138,4,.07)}
 
 .detail-sections{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-top:18px}
 .detail-section{background:var(--surface);border:1px solid var(--border);padding:17px;box-shadow:var(--shadow-sm);animation:fadeUp .3s ease}
@@ -186,24 +221,19 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 
 /* ══════════════════════════════════════════════
    @media print — PDF completo A4
-   IMPORTANTE: oculta TODO lo de pantalla,
-   muestra solo #pdf-cover y #pdf-body
 ══════════════════════════════════════════════ */
 @media print {
   @page { size:A4 portrait; margin:11mm 13mm 11mm 13mm }
 
-  /* Ocultar absolutamente todo lo de la app */
   .app,
   header, aside, main,
   #view-org, #view-list, #view-detail { display:none !important }
 
   html,body { background:white !important; color:#111 !important; font-size:10pt; margin:0; padding:0 }
 
-  /* Mostrar contenedores PDF */
   #pdf-cover { display:flex !important }
   #pdf-body  { display:block !important }
 
-  /* ── CARÁTULA ── */
   #pdf-cover {
     flex-direction:column;
     justify-content:flex-start;
@@ -275,90 +305,106 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
     font-size:7pt;color:#AAA;
   }
 
-  .cover-footer-red { color:#CC0000; font-weight:500; }
+  .cover-footer-red { color:#CC0000; }
 
-  /* ── FICHAS DE PUESTO ── */
-  #pdf-body { page-break-before:avoid }
-
+  /* ── FICHAS ── */
   .pdf-page {
     page-break-before:always;
+    page-break-inside:avoid;
     padding:0;
     min-height:277mm;
+    position:relative;
     display:flex;
     flex-direction:column;
-    position:relative;
   }
 
   .pdf-page-hdr {
     border-left:4mm solid #CC0000;
-    padding-left:5mm;
-    margin-bottom:6mm;
+    padding:4mm 6mm;
+    margin-bottom:5mm;
   }
 
   .pdf-area {
     font-family:'DM Mono',monospace;
-    font-size:7pt;letter-spacing:2px;
-    text-transform:uppercase;color:#CC0000;
+    font-size:7pt;letter-spacing:2px;text-transform:uppercase;color:#CC0000;
     margin-bottom:1mm;
   }
 
   .pdf-titulo {
     font-family:'Bebas Neue',sans-serif;
-    font-size:32pt;letter-spacing:3px;
-    color:#111;line-height:1;
-    margin-bottom:1.5mm;
+    font-size:32pt;letter-spacing:3px;color:#111;
+    line-height:1;margin-bottom:1mm;
   }
 
   .pdf-rep {
     font-family:'DM Mono',monospace;
-    font-size:8pt;color:#666;
+    font-size:7.5pt;color:#888;
   }
+
+  /* Asignados en PDF */
+  .pdf-asignado {
+    font-family:'DM Mono',monospace;
+    font-size:7pt;color:#555;
+    margin-top:1mm;
+  }
+  .pdf-asig-chip {
+    display:inline-block;
+    padding:0.5mm 2mm;
+    font-size:7pt;
+    border:0.5pt solid;
+  }
+  .pdf-asig-chip.assigned{border-color:#16a34a;color:#16a34a}
+  .pdf-asig-chip.tbd{border-color:#ca8a04;color:#ca8a04}
 
   .pdf-cols {
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
     gap:4mm;
-    margin-top:5mm;
     flex:1;
   }
 
-  .pdf-col {
-    border:0.5pt solid #DDD;
-    padding:4mm;
-  }
+  .pdf-col { border:0.5pt solid #DDD; padding:3mm; }
 
   .pdf-col-title {
     font-family:'Bebas Neue',sans-serif;
-    font-size:11pt;letter-spacing:1.5px;
-    color:#111;
-    border-bottom:0.5pt solid #EEE;
-    padding-bottom:2mm;margin-bottom:3mm;
+    font-size:10pt;letter-spacing:2px;color:#111;
+    margin-bottom:2mm;padding-bottom:1.5mm;
+    border-bottom:1pt solid #CC0000;
+    display:flex;align-items:center;gap:2mm;
   }
 
   .pdf-col-title span {
-    display:inline-block;
-    width:2mm;height:6pt;
+    display:inline-block;width:2mm;height:2mm;
     background:#CC0000;
-    margin-right:2mm;
-    vertical-align:middle;
   }
 
-  .pdf-list { list-style:none;padding:0 }
+  .pdf-list {
+    list-style:none;padding:0;margin:0;
+    display:flex;flex-direction:column;gap:1.5mm;
+  }
+
   .pdf-list li {
     font-family:'DM Sans',sans-serif;
-    font-size:8pt;color:#333;
-    line-height:1.5;margin-bottom:2mm;
-    padding-left:8pt;text-indent:-8pt;
+    font-size:7.5pt;color:#333;
+    line-height:1.4;
+    padding-left:3mm;
+    position:relative;
   }
-  .pdf-list li::before { content:'— ';color:#CC0000 }
+
+  .pdf-list li::before {
+    content:'–';
+    position:absolute;left:0;
+    color:#CC0000;
+  }
 
   .pdf-page-footer {
-    margin-top:auto;
-    padding-top:3mm;
-    border-top:0.5pt solid #EEE;
+    position:absolute;
+    bottom:0;left:0;right:0;
+    border-top:0.5pt solid #DDD;
+    padding:2mm 0;
     display:flex;justify-content:space-between;
     font-family:'DM Mono',monospace;
-    font-size:7pt;color:#AAA;
+    font-size:6.5pt;color:#AAA;
   }
 }
 
@@ -377,6 +423,7 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
     <span class="hdr-title">GOE <span>ORG</span></span>
     <div class="hdr-sep"></div>
     <span class="hdr-sub"><span class="pulse"></span>Obras Electromecánicas</span>
+    <span id="hdr-obra" class="hdr-obra" style="display:none"></span>
 
     <div class="hdr-right">
       <div class="search-wrap">
@@ -395,7 +442,7 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
         <svg id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg id="icon-moon" style="display:none" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
-      <span class="version">v03</span>
+      <span class="version">v04</span>
     </div>
   </header>
 
@@ -413,14 +460,30 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 
   <!-- MAIN -->
   <main id="main">
-    <div id="view-org"></div>
-    <div id="view-list"><div id="list-cards"></div></div>
-    <div id="view-detail">
-      <div class="detail-back" onclick="closeDetail()">
-        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        Volver
+    <!-- Loading -->
+    <div id="loading-state">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Cargando estructura...</div>
+    </div>
+
+    <!-- Error -->
+    <div id="error-state">
+      <div class="error-icon">⚠</div>
+      <div class="error-title">Error al cargar</div>
+      <div class="error-msg" id="error-msg"></div>
+    </div>
+
+    <!-- Contenido (oculto hasta que carga) -->
+    <div id="app-content" style="display:none;height:100%">
+      <div id="view-org"></div>
+      <div id="view-list"><div id="list-cards"></div></div>
+      <div id="view-detail">
+        <div class="detail-back" onclick="closeDetail()">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          Volver
+        </div>
+        <div id="detail-content"></div>
       </div>
-      <div id="detail-content"></div>
     </div>
   </main>
 </div>
@@ -431,211 +494,293 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 
 <script>
 // ══════════════════════════════════════════════════
-// DATA (IWP → paquete de trabajo)
+// CONFIG
 // ══════════════════════════════════════════════════
-const DATA = {"proyecto":"Proyecto Electromecánico - Obras & Gas","version":"1.0","roles":[{"id":"gerente_proyecto","titulo":"Gerente de Proyecto","reporta_a":"Gerente de Operaciones","reporta_a_id":"gerente_operaciones","nivel":1,"area":"Dirección","funciones":["Dirigir integralmente el proyecto, coordinando todas las áreas funcionales (construcción, administración, QAQC, H&S, oficina técnica y control de gestión).","Gestionar la relación con el cliente, organismos externos y partes interesadas clave, siendo la cara visible de la compañía en el proyecto.","Tomar decisiones estratégicas sobre recursos humanos, materiales, equipos y subcontratistas en función del plan de ejecución.","Garantizar el cumplimiento del sistema de gestión integrado CSMA (Calidad, Seguridad, Medio Ambiente).","Analizar resultados económicos del proyecto, identificar desvíos y definir acciones correctivas con impacto en el resultado final."],"responsabilidades":["Alcanzar los objetivos de plazo, costo y calidad comprometidos contractualmente con el cliente.","Asegurar la correcta aplicación de las políticas y procedimientos corporativos en el proyecto.","Aprobar el plan de ejecución del proyecto, el cronograma maestro y el presupuesto de obra.","Mantener informada a la Gerencia de Operaciones sobre el estado del proyecto mediante reportes periódicos.","Gestionar los riesgos del proyecto, anticipando problemáticas contractuales, técnicas o de recursos."],"entregables":["Informe mensual de gestión del proyecto (avance físico, financiero, CSMA y riesgos).","Plan de ejecución del proyecto (PEP) aprobado y actualizado.","Actas de reuniones de coordinación interna y con el cliente.","Forecast de costos y proyección de resultado económico.","Reporte de gestión de riesgos y plan de mitigación."]},{"id":"gerente_construccion","titulo":"Gerente de Construcción","reporta_a":"Gerente de Proyecto","reporta_a_id":"gerente_proyecto","nivel":2,"area":"Construcción","funciones":["Dirigir y coordinar todas las actividades de construcción en campo, supervisando a los Jefes de Obra.","Planificar la secuencia constructiva general del proyecto, definiendo la metodología de ejecución por frentes de trabajo.","Gestionar los recursos de construcción (mano de obra propia y subcontratada, equipos, herramientas) para asegurar el cumplimiento del cronograma.","Coordinar con las áreas de Oficina Técnica, QAQC y H&S la resolución de interferencias técnicas y desafíos constructivos.","Representar al área de construcción en instancias de coordinación con el cliente, inspección de obra y contratistas."],"responsabilidades":["Garantizar el avance físico de la obra conforme al cronograma y los estándares de calidad y seguridad definidos.","Controlar la productividad de los frentes de trabajo y tomar medidas correctivas ante desvíos.","Validar los paquetes de trabajo de instalación antes de su liberación a campo.","Asegurar el cumplimiento de las normativas de H&S (Ley 19.587 y CCT de la construcción) en todas las actividades de campo.","Gestionar el desempeño del personal jerárquico de construcción (Jefes de Obra, Supervisores)."],"entregables":["Informe semanal de avance físico por frente de trabajo.","Plan de recursos y equipos actualizado mensualmente.","Registro de interferencias técnicas y estado de resolución.","Reporte de productividad y rendimiento de cuadrillas.","Actas de coordinación con inspección de obra y subcontratistas."]},{"id":"jefe_obra","titulo":"Jefe de Obra","reporta_a":"Gerente de Construcción","reporta_a_id":"gerente_construccion","nivel":3,"area":"Construcción","funciones":["Coordinar en campo los recursos técnicos y humanos asignados al sector o disciplina a su cargo, conforme al plan de ejecución.","Analizar la documentación técnica (planos, especificaciones, paquetes de trabajo) y asegurar su correcta interpretación por parte de supervisores y cuadrillas.","Gestionar los pedidos de materiales, equipos y herramientas al almacén y área de servicios generales.","Mantener comunicación fluida con la inspección de obra del cliente para reportar avance, certificaciones y resolver consultas técnicas.","Supervisar el desempeño de supervisores y capataces bajo su dependencia."],"responsabilidades":["Cumplir los plazos y estándares de calidad definidos en el cronograma y los paquetes de trabajo liberados.","Controlar el uso eficiente de la mano de obra, minimizando tiempos improductivos.","Verificar que los trabajos se ejecuten conforme a planos aprobados y especificaciones técnicas vigentes.","Reportar diariamente el avance físico y los inconvenientes de campo al Gerente de Construcción.","Participar activamente en la gestión de H&S, haciendo cumplir los procedimientos y permisos de trabajo."],"entregables":["Parte diario de avance de obra por disciplina o sector.","Solicitudes de materiales y equipos con trazabilidad al paquete de trabajo correspondiente.","Registro de no conformidades detectadas en campo.","Informe de estado de completitud de paquetes de trabajo (liberados, en ejecución, cerrados).","Reporte de personal activo y asistencia diaria."]},{"id":"supervisor","titulo":"Supervisor","reporta_a":"Jefe de Obra","reporta_a_id":"jefe_obra","nivel":4,"area":"Construcción","funciones":["Organizar y dirigir las cuadrillas asignadas para la ejecución de trabajos específicos conforme a los paquetes de trabajo activos.","Planificar diariamente las tareas de los capataces, asignando recursos y verificando disponibilidad de materiales y equipos.","Controlar el cumplimiento de plazos parciales y la productividad de cada cuadrilla a cargo.","Asegurar que los trabajos se ejecuten según los procedimientos constructivos, planos y especificaciones vigentes.","Hacer cumplir los procedimientos de H&S, permisos de trabajo y uso correcto de EPP en su sector."],"responsabilidades":["Alcanzar los rendimientos productivos definidos en el paquete de trabajo para su disciplina o sector.","Reportar diariamente el avance y las restricciones encontradas al Jefe de Obra.","Gestionar la asistencia, el desempeño y la disciplina del personal operativo a su cargo.","Verificar que los materiales recibidos en campo sean los correctos y estén en condiciones de uso.","Participar en charlas de seguridad diarias (toolbox meetings) y en la elaboración de análisis de riesgo (ATS/JSA)."],"entregables":["Parte diario de producción por cuadrilla y actividad.","ATS/JSA (Análisis de Trabajo Seguro) completados antes del inicio de cada tarea.","Registro de asistencia y novedades de personal.","Reporte de avance de paquete de trabajo con porcentaje de completitud por actividad.","Listado de restricciones y requerimientos pendientes para el día siguiente."]},{"id":"capataz","titulo":"Capataz","reporta_a":"Supervisor","reporta_a_id":"supervisor","nivel":5,"area":"Construcción","funciones":["Dirigir y coordinar directamente al personal operativo (oficiales y ayudantes) en la ejecución de trabajos de campo.","Interpretar planos y especificaciones técnicas para guiar al personal en la ejecución correcta de cada tarea.","Controlar el uso de materiales, herramientas y equipos en su frente de trabajo, reportando consumos al Supervisor.","Aplicar y hacer cumplir los procedimientos de H&S en el área de trabajo bajo su responsabilidad.","Informar al Supervisor sobre el avance diario, inconvenientes técnicos y necesidades de recursos."],"responsabilidades":["Ejecutar los trabajos conforme a los estándares de calidad y los plazos parciales definidos.","Mantener el orden y la limpieza del frente de trabajo durante y al finalizar cada jornada.","Gestionar la disciplina y el rendimiento del personal operativo asignado a su cuadrilla.","Verificar que el personal cuente con los EPP adecuados y en buen estado antes de iniciar tareas.","Colaborar en la confección del ATS/JSA junto al Supervisor antes del inicio de actividades de riesgo."],"entregables":["Reporte verbal/digital de avance diario al Supervisor.","Registro de materiales consumidos y herramientas utilizadas.","Participación registrada en charlas de H&S y ATS/JSA firmados.","Parte de novedades del personal (asistencias, incidentes, observaciones).","Checklist de verificación previa al inicio de trabajos críticos."]},{"id":"administrador_contrato","titulo":"Administrador de Contrato","reporta_a":"Gerente de Operaciones","reporta_a_id":"gerente_operaciones","nivel":1,"area":"Administración de Contratos","funciones":["Gestionar integralmente el contrato con el cliente, asegurando el cumplimiento de las condiciones pactadas y la defensa de los intereses de la compañía.","Identificar, documentar y tramitar órdenes de cambio, adicionales y reclamaciones contractuales ante el cliente.","Controlar el alcance contractual, detectando desvíos y alertando al Gerente de Operaciones y Gerente de Proyecto.","Coordinar la elaboración y presentación de certificaciones, valuaciones y estados de avance en los plazos contractuales.","Revisar y negociar contratos con subcontratistas, asegurando la coherencia con el contrato principal."],"responsabilidades":["Asegurar que toda modificación al alcance original quede documentada y aprobada antes de su ejecución.","Gestionar el cobro oportuno de los certificados emitidos, controlando los plazos contractuales de pago.","Mantener el archivo contractual completo, ordenado y actualizado (contrato principal, adendas, notas, actas).","Alertar oportunamente sobre riesgos contractuales, disputas o incumplimientos de cualquiera de las partes.","Coordinar con el área legal y financiera de la compañía para la resolución de conflictos contractuales."],"entregables":["Registro de órdenes de cambio y adicionales (estado, montos, aprobación).","Informe mensual de situación contractual (alcance, desvíos, reclamaciones pendientes).","Certificados de avance y valuaciones presentadas al cliente.","Actas de reuniones contractuales con el cliente.","Reporte de cobros y saldos pendientes por certificación."]},{"id":"jefe_control_gestion","titulo":"Jefe de Control de Gestión","reporta_a":"Gerente de Proyecto","reporta_a_id":"gerente_proyecto","nivel":2,"area":"Control de Gestión","funciones":["Desarrollar y mantener el sistema de control de gestión integrado del proyecto, abarcando planificación, seguimiento de avance físico-financiero y análisis de desvíos.","Consolidar y analizar la información de todas las áreas del proyecto para producir reportes de gestión precisos y oportunos.","Supervisar al Encargado de Planificación y al Encargado de Certificación, articulando sus funciones con las necesidades del Gerente de Proyecto.","Implementar y mantener la metodología AWP/CII en el proyecto, coordinando la generación y liberación de paquetes de trabajo con Oficina Técnica y Construcción.","Capacitar y asistir al equipo de proyecto en herramientas de control de gestión, cronogramas y métricas de productividad."],"responsabilidades":["Garantizar la confiabilidad y oportunidad de la información de avance físico y financiero reportada al Gerente de Proyecto.","Mantener el cronograma maestro actualizado y alertar sobre desvíos críticos con anticipación suficiente para tomar acciones.","Coordinar el proceso de certificación mensual con el cliente, articulando con el Administrador de Contrato.","Controlar el presupuesto de horas y costos, produciendo proyecciones de resultado (EAC/ETC).","Asegurar la integridad del sistema de información del proyecto (ERP, herramientas de scheduling, dashboards)."],"entregables":["Informe mensual de gestión del proyecto (dashboard de avance, desvíos y forecast).","Cronograma maestro actualizado con curva S y análisis de valor ganado (EVM).","Reporte semanal de avance físico por disciplina / frente de trabajo.","Estado de certificación mensual y proyección de ingresos.","Informe de análisis de desvíos con causas raíz y acciones correctivas propuestas."]},{"id":"jefe_administracion","titulo":"Jefe de Administración","reporta_a":"Gerente de Proyecto","reporta_a_id":"gerente_proyecto","nivel":2,"area":"Administración","funciones":["Gestionar la administración financiera y contable de la obra, incluyendo manejo de fondos, pagos, registración y conciliaciones.","Coordinar y supervisar al personal a cargo: Encargados de Compras, RRHH, SSGG, Pañol y Almacén.","Administrar la relación con proveedores y subcontratistas en lo referente a facturación, condiciones de pago y documentación habilitante.","Gestionar los requerimientos laborales y legales del personal de obra (altas, bajas, liquidaciones, CCT de la construcción).","Asegurar el cumplimiento de las obligaciones fiscales, impositivas y previsionales de la obra."],"responsabilidades":["Mantener el control de los fondos de obra, asegurando disponibilidad para el pago de jornales, proveedores y gastos operativos.","Supervisar la correcta registración contable de todas las operaciones de la obra.","Controlar la documentación de ingreso del personal propio y subcontratado (legajos, habilitaciones, seguros).","Asegurar el cumplimiento del CCT de la construcción y la normativa laboral vigente.","Reportar al Gerente de Proyecto el estado financiero y administrativo de la obra."],"entregables":["Informe mensual de situación financiera de la obra (ingresos, egresos, saldo de caja).","Conciliaciones bancarias y estado de cuentas de proveedores.","Nómina de personal activo con legajos completos y al día.","Planilla de liquidación de haberes y jornales.","Reporte de estado de facturas de proveedores y subcontratistas (recibidas, aprobadas, pagadas)."]},{"id":"jefe_qaqc","titulo":"Jefe de QA/QC","reporta_a":"Gerente de Proyecto","reporta_a_id":"gerente_proyecto","nivel":2,"area":"Calidad","funciones":["Elaborar, implementar y mantener el Plan de Calidad del proyecto conforme a los requisitos contractuales y normas aplicables (ISO 9001, ASME, API, IRAM según corresponda).","Gestionar el sistema de inspección y ensayos en campo (QC), coordinando a los inspectores y asegurando la trazabilidad de los registros.","Gestionar el sistema de no conformidades, acciones correctivas y preventivas (NCR/CAR) hasta su cierre formal.","Coordinar las auditorías internas y externas del sistema de calidad, atendiendo requerimientos del cliente y certificadoras.","Difundir la cultura de calidad en el proyecto y capacitar al personal en procedimientos e instrucciones de trabajo aplicables."],"responsabilidades":["Asegurar que todos los trabajos ejecutados cuenten con los registros de calidad requeridos antes del cierre del paquete de trabajo.","Aprobar o rechazar trabajos según los criterios de aceptación definidos en las especificaciones técnicas y el Plan de Calidad.","Gestionar el dossier de calidad del proyecto, asegurando su completitud para la entrega final al cliente.","Controlar la calidad de los materiales recibidos en obra, coordinando con el almacén y proveedores.","Reportar al Gerente de Proyecto el estado del sistema de calidad, incluyendo indicadores de no conformidades y estado de los planes de acción."],"entregables":["Plan de Calidad del proyecto aprobado por el cliente.","Registro de inspecciones y ensayos (ITPs completados por disciplina).","Informe mensual de gestión de calidad (NCRs abiertas/cerradas, indicadores).","Dossier de calidad de obra (compilado para entrega final).","Informes de auditorías internas y estado de acciones correctivas."]},{"id":"jefe_hs","titulo":"Jefe de H&S","reporta_a":"Gerente de Proyecto","reporta_a_id":"gerente_proyecto","nivel":2,"area":"Higiene y Seguridad","funciones":["Elaborar y mantener actualizado el Legajo Técnico de H&S de la obra conforme a la Ley 19.587, Decreto 911/96 y normativa del cliente.","Implementar el programa de H&S del proyecto, incluyendo capacitación, inspecciones, permisos de trabajo y gestión de riesgos.","Investigar incidentes y accidentes, determinando causas raíz e implementando acciones correctivas para evitar recurrencia.","Realizar mediciones ambientales (ruido, iluminación, polvos, puesta a tierra) y registrarlas en el libro de contaminantes.","Coordinar y atender auditorías externas del cliente y organismos de control en materia de H&S."],"responsabilidades":["Asegurar el cumplimiento de la legislación vigente (Ley 19.587, Decreto 911/96, ISO 45001 cuando aplique) y los estándares del cliente.","Mantener las estadísticas de siniestralidad y presentar los informes requeridos a la ART y organismos competentes.","Supervisar la correcta aplicación de permisos de trabajo, procedimientos de bloqueo/etiquetado (LOTO) y trabajo en altura.","Garantizar que todo el personal cuente con los EPP adecuados, capacitación vigente y aptitud médica.","Reportar al Gerente de Proyecto el estado del sistema de H&S, incluyendo indicadores de accidentabilidad y estado de planes de acción."],"entregables":["Legajo Técnico de H&S actualizado y aprobado.","Informe mensual de H&S (indicadores, estadísticas, incidentes, capacitaciones).","Registros de capacitación del personal (inducción, charlas, cursos).","Informes de investigación de incidentes/accidentes con plan de acción.","Mediciones ambientales registradas en el libro de contaminantes."]},{"id":"jefe_oficina_tecnica","titulo":"Jefe de Oficina Técnica","reporta_a":"Gerente de Proyecto","reporta_a_id":"gerente_proyecto","nivel":2,"area":"Oficina Técnica","funciones":["Gestionar el flujo de documentación técnica del proyecto (planos, especificaciones, procedimientos) asegurando que campo trabaje siempre con la revisión vigente.","Coordinar al proyectista y al control de documentos, articulando las necesidades técnicas del proyecto con la ingeniería del cliente.","Gestionar las consultas técnicas (RFI) y desvíos de ingeniería, dando seguimiento hasta su resolución formal.","Elaborar o revisar pedidos de suministros y materiales técnicos, asegurando la correcta especificación para compras.","Participar en la planificación de la ruta crítica y en la generación de paquetes de trabajo en coordinación con Control de Gestión."],"responsabilidades":["Asegurar que toda la documentación técnica emitida a campo esté aprobada, vigente y trazada en el sistema de control documental.","Gestionar el cierre oportuno de las consultas técnicas (RFI) para no generar restricciones al avance de obra.","Controlar la lista maestra de documentos del proyecto (MDR) y su estado de revisión.","Coordinar con QAQC la documentación necesaria para los ITPs y el dossier de calidad.","Reportar al Gerente de Proyecto el estado de la ingeniería, las consultas abiertas y los desvíos técnicos relevantes."],"entregables":["Lista Maestra de Documentos (MDR) actualizada.","Registro de RFIs (consultas técnicas) con estado y fechas de resolución.","Paquetes de documentación técnica emitidos a campo (con acuse de recibo).","Pedidos de materiales técnicos con especificaciones aprobadas.","Informe mensual de estado de ingeniería y documentación."]},{"id":"encargado_compras","titulo":"Encargado de Compras","reporta_a":"Jefe de Administración","reporta_a_id":"jefe_administracion","nivel":3,"area":"Administración","funciones":["Gestionar el proceso de compras de la obra, desde la recepción del requerimiento hasta la entrega del material en almacén o pañol.","Realizar cotizaciones con proveedores calificados, elaborar cuadros comparativos y seleccionar la mejor oferta técnico-comercial.","Emitir y gestionar órdenes de compra, controlando plazos de entrega y condiciones pactadas.","Gestionar compras y contrataciones de servicios menores requeridos por la obra.","Mantener y actualizar el registro de proveedores habilitados, incorporando nuevos cuando sea necesario."],"responsabilidades":["Asegurar el abastecimiento oportuno de materiales y servicios para no generar restricciones al avance de obra.","Controlar que los materiales recibidos cumplan con las especificaciones técnicas aprobadas.","Gestionar los reclamos a proveedores por incumplimientos en calidad, cantidad o plazo.","Mantener el archivo de órdenes de compra y la trazabilidad con los requerimientos de origen.","Reportar al Jefe de Administración el estado de las compras pendientes y los posibles riesgos de desabastecimiento."],"entregables":["Órdenes de compra emitidas con trazabilidad al requerimiento de origen.","Cuadros comparativos de cotizaciones por proceso de compra.","Informe semanal de estado de compras pendientes (en proceso, entregadas, con atraso).","Registro de proveedores calificados actualizado.","Remitos y documentación de recepción de materiales."]},{"id":"encargado_rrhh","titulo":"Encargado de RRHH","reporta_a":"Jefe de Administración","reporta_a_id":"jefe_administracion","nivel":3,"area":"Administración","funciones":["Gestionar los procesos de incorporación y egreso del personal de obra (alta/baja en AFIP, UOCRA, ART y obra social).","Administrar la documentación laboral del personal propio y subcontratado (legajos, contratos, habilitaciones gremiales).","Coordinar con el Jefe de Administración la liquidación de haberes, jornales y adicionales conforme al CCT de la construcción vigente.","Gestionar las relaciones con el sindicato (UOCRA) y resolver novedades laborales de campo en coordinación con la jefatura.","Controlar la documentación habilitante del personal subcontratado (seguros, ART, capacitaciones) para el ingreso a obra."],"responsabilidades":["Asegurar el cumplimiento de la normativa laboral vigente (CCT de la construcción, Ley de Contrato de Trabajo, régimen de trabajo en obra).","Mantener los legajos del personal actualizados y en condiciones de ser auditados por el cliente u organismos de control.","Gestionar las licencias, ausencias y novedades del personal de manera oportuna.","Controlar que el personal subcontratado cumpla con los requisitos de ingreso a obra antes de su incorporación.","Reportar al Jefe de Administración el estado del plantel, novedades laborales y situaciones de riesgo sindical."],"entregables":["Nómina actualizada del personal de obra (propio y subcontratado) con estado de legajo.","Planilla de novedades para liquidación (ausencias, horas extra, adicionales).","Registro de capacitaciones y habilitaciones del personal.","Informe de altas y bajas del período.","Checklist de requisitos de ingreso cumplidos por personal subcontratado."]},{"id":"encargado_ssgg","titulo":"Encargado de SSGG","reporta_a":"Jefe de Administración","reporta_a_id":"jefe_administracion","nivel":3,"area":"Administración","funciones":["Gestionar el abastecimiento de materiales y equipos de obra mediante compras menores y coordinación con proveedores locales.","Administrar la logística de equipos (movilización, mantenimiento preventivo y correctivo, y devolución al finalizar el uso).","Coordinar los servicios generales del campamento u oficinas de obra (limpieza, catering, transporte, comunicaciones).","Elaborar planillas comparativas de precios y emitir órdenes de compra para servicios y materiales de bajo monto.","Controlar la recepción de materiales y equipos en obra, verificando cantidades y condiciones."],"responsabilidades":["Asegurar la disponibilidad de equipos y materiales generales para el normal funcionamiento de la obra.","Controlar los contratos de servicios generales, verificando cumplimiento de condiciones pactadas.","Gestionar el mantenimiento de los equipos asignados a la obra, llevando registro de intervenciones.","Coordinar la devolución de equipos alquilados en tiempo y forma para evitar costos innecesarios.","Reportar al Jefe de Administración el estado de los servicios generales y equipos asignados."],"entregables":["Registro de equipos en obra (propios y alquilados) con estado y vencimientos.","Órdenes de compra y contratos de servicios generales.","Informe mensual de costos de servicios generales y equipos.","Registro de mantenimiento de equipos.","Documentación de devolución de equipos (actas de entrega-recepción)."]},{"id":"encargado_panol","titulo":"Encargado de Pañol","reporta_a":"Jefe de Administración","reporta_a_id":"jefe_administracion","nivel":3,"area":"Administración","funciones":["Gestionar el pañol de herramientas y equipos menores de obra, controlando la entrega, devolución y estado de cada ítem.","Mantener el inventario actualizado del pañol, registrando altas (compras, préstamos) y bajas (pérdidas, daños, devoluciones).","Coordinar con supervisores y capataces la disponibilidad de herramientas para los frentes de trabajo activos.","Controlar el estado de las herramientas entregadas, gestionando reparaciones o reemplazos cuando corresponda.","Asegurar el orden, la seguridad y las condiciones de almacenamiento adecuadas en el pañol."],"responsabilidades":["Garantizar la trazabilidad de cada herramienta o equipo menor entregado, identificando al responsable de cada ítem.","Prevenir pérdidas y deterioro de herramientas mediante controles de entrega-devolución y mantenimiento básico.","Informar al Jefe de Administración sobre faltantes, herramientas dañadas o necesidades de reposición.","Cumplir con los procedimientos de H&S para el almacenamiento de herramientas eléctricas, neumáticas y materiales peligrosos.","Colaborar con los inventarios periódicos solicitados por el Jefe de Administración o el Gerente de Proyecto."],"entregables":["Inventario actualizado del pañol (stock actual, asignaciones vigentes).","Vales de salida y devolución de herramientas por operario/cuadrilla.","Reporte de herramientas dañadas, perdidas o en reparación.","Informe de necesidades de reposición.","Resultado del inventario físico periódico."]},{"id":"encargado_almacen","titulo":"Encargado de Almacén","reporta_a":"Jefe de Administración","reporta_a_id":"jefe_administracion","nivel":3,"area":"Administración","funciones":["Gestionar la recepción, almacenamiento y despacho de materiales de obra, asegurando la trazabilidad de cada movimiento.","Controlar que los materiales recibidos coincidan con las órdenes de compra y cumplan con los requisitos de calidad (en coordinación con QAQC).","Mantener el sistema de inventario de materiales actualizado, generando alertas de stock mínimo cuando corresponda.","Gestionar el almacenamiento adecuado de los materiales según sus características (protección ambiental, preservación, segregación).","Coordinar con el Jefe de Obra y los Supervisores el despacho de materiales conforme a los paquetes de trabajo activos."],"responsabilidades":["Asegurar que los materiales despachados a campo estén respaldados por una solicitud de material aprobada y trazada al paquete de trabajo correspondiente.","Prevenir mermas, daños y pérdidas de materiales en el almacén mediante buenas prácticas de almacenamiento.","Controlar los documentos de recepción (remitos, certificados de calidad, certificados de materiales) y archivarlos correctamente.","Reportar al Jefe de Administración el estado del stock, las recepciones del período y los despachos realizados.","Colaborar en los inventarios físicos periódicos y gestionar la regularización de diferencias detectadas."],"entregables":["Kardex o registro de movimientos de materiales (entradas y salidas) actualizado.","Remitos de recepción conformados con verificación de cantidad y calidad.","Vales de despacho de material a campo con trazabilidad al paquete de trabajo.","Informe semanal de stock disponible y alertas de mínimos.","Resultado del inventario físico periódico."]},{"id":"control_documento","titulo":"Control de Documento","reporta_a":"Jefe de Oficina Técnica","reporta_a_id":"jefe_oficina_tecnica","nivel":3,"area":"Oficina Técnica","funciones":["Gestionar el sistema de control documental del proyecto, asegurando el registro, distribución y trazabilidad de todos los documentos técnicos.","Mantener actualizada la Lista Maestra de Documentos (MDR) con el estado de revisión, aprobación y distribución de cada documento.","Recibir, registrar y distribuir la documentación emitida por el cliente y la ingeniería, notificando a los destinatarios correspondientes.","Controlar la anulación y reemplazo de documentos superados, asegurando que no queden en circulación revisiones obsoletas.","Gestionar el archivo físico y digital del proyecto conforme a los procedimientos de control documental del cliente y la compañía."],"responsabilidades":["Garantizar que todo el personal de campo trabaje con la última revisión vigente de planos y especificaciones.","Mantener el archivo documental del proyecto completo, ordenado y disponible para auditorías internas y externas.","Gestionar el cierre documental al finalizar el proyecto, confeccionando el dossier de documentación as-built.","Registrar y dar seguimiento a las transmitals enviadas y recibidas, controlando los acuses de recibo.","Reportar al Jefe de Oficina Técnica las inconsistencias documentales detectadas o los documentos con distribución pendiente."],"entregables":["Lista Maestra de Documentos (MDR) actualizada.","Registro de transmitals enviados y recibidos.","Acuses de recibo de documentación distribuida a campo.","Informe de documentos pendientes de aprobación o emisión.","Dossier documental del proyecto (as-built) al cierre de obra."]},{"id":"proyectista","titulo":"Proyectista","reporta_a":"Jefe de Oficina Técnica","reporta_a_id":"jefe_oficina_tecnica","nivel":3,"area":"Oficina Técnica","funciones":["Elaborar y/o revisar planos, esquemas y documentación técnica de ingeniería de detalle requerida para la ejecución de la obra.","Resolver consultas técnicas de campo (RFIs), emitiendo documentación aclaratoria o modificaciones de ingeniería cuando corresponda.","Coordinar con el Jefe de Oficina Técnica la incorporación de cambios de ingeniería al sistema de control documental.","Desarrollar documentación as-built registrando en planos las modificaciones ejecutadas durante la construcción.","Colaborar en la elaboración de pedidos de materiales técnicos, verificando especificaciones y cantidades."],"responsabilidades":["Emitir documentación técnica de calidad, conforme a las normas aplicables y los estándares del cliente.","Gestionar las revisiones de planos en forma oportuna para no generar restricciones al avance de campo.","Mantener coherencia entre la documentación emitida y los cambios de ingeniería aprobados.","Asegurar que los planos as-built reflejen fielmente lo ejecutado en obra.","Reportar al Jefe de Oficina Técnica los conflictos técnicos detectados en la documentación de ingeniería."],"entregables":["Planos de detalle y esquemas técnicos emitidos para construcción (IFC).","Respuestas a RFIs con documentación técnica de soporte.","Planos as-built completados al cierre de cada paquete de trabajo.","Listados de materiales (BOM) para pedidos de compra.","Registro de cambios de ingeniería emitidos."]},{"id":"encargado_planificacion","titulo":"Encargado de Planificación","reporta_a":"Jefe de Control de Gestión","reporta_a_id":"jefe_control_gestion","nivel":3,"area":"Control de Gestión","funciones":["Desarrollar y mantener el cronograma detallado del proyecto (Nivel 3/4) en herramientas especializadas (Primavera P6, MS Project u equivalente).","Elaborar la curva S de avance físico planificado y realizar el seguimiento semanal del avance real.","Gestionar el proceso de generación y actualización de los paquetes de trabajo en coordinación con Oficina Técnica y Construcción.","Analizar el camino crítico del proyecto, identificar desvíos y proponer alternativas de recupero al Jefe de Control de Gestión.","Coordinar con los Jefes de Obra la recopilación del avance físico semanal por actividad para la actualización del cronograma."],"responsabilidades":["Mantener el cronograma maestro actualizado y alineado con el plan de ejecución vigente.","Emitir el cronograma de tres semanas (lookahead) para la planificación operativa de campo.","Identificar y registrar restricciones que impidan la ejecución de actividades planificadas, gestionando su resolución.","Asegurar la correcta estructuración de la WBS y la codificación de actividades conforme al estándar del proyecto.","Reportar al Jefe de Control de Gestión los desvíos de cronograma, su impacto y las alternativas analizadas."],"entregables":["Cronograma detallado del proyecto actualizado (P6/MSP).","Lookahead de 3 semanas por disciplina o frente de trabajo.","Curva S planificado vs. real actualizada semanalmente.","Registro de restricciones y estado de levantamiento.","Informe de análisis de camino crítico y tendencias del proyecto."]},{"id":"encargado_certificacion","titulo":"Encargado de Certificación","reporta_a":"Jefe de Control de Gestión","reporta_a_id":"jefe_control_gestion","nivel":3,"area":"Control de Gestión","funciones":["Gestionar el proceso de certificación mensual de obra con el cliente, elaborando los estados de avance y las valuaciones correspondientes.","Controlar los precios unitarios, cómputos y bases de certificación establecidas en el contrato.","Coordinar con el Jefe de Obra la medición de los trabajos ejecutados, asegurando la correcta cuantificación de las actividades a certificar.","Gestionar la documentación soporte de cada certificado (planillas de medición, registros de avance, aprobaciones del cliente).","Realizar el seguimiento del cobro de certificados, alertando sobre demoras o diferencias con el cliente."],"responsabilidades":["Asegurar que los certificados se presenten al cliente en los plazos contractuales establecidos.","Controlar que los montos certificados estén correctamente sustentados con mediciones de campo aprobadas.","Mantener el registro histórico de certificaciones emitidas, aprobadas y cobradas.","Coordinar con el Administrador de Contrato las órdenes de cambio que impacten en la certificación.","Reportar al Jefe de Control de Gestión el estado de certificación del período y la proyección de ingresos."],"entregables":["Certificado mensual de avance con planillas de medición y documentación soporte.","Registro histórico de certificaciones (emitidas, aprobadas, cobradas).","Informe de desvíos entre avance físico y monto certificado.","Proyección de certificación para los próximos períodos.","Documentación de respaldo de cada proceso de medición y certificación."]}]};
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxsJTP8o_F01Njtwk7Z2Oz3Z8OhNc__g9EbPGRzoP7DqfuarMr86LNpoIXlTsTJk6t4/exec';
 
 // ══════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════
-let currentView='org', currentRole=null, activeFilter='todos', searchTerm='', prevView='org';
-const rolesById={};
-DATA.roles.forEach(r=>rolesById[r.id]=r);
-function getSubs(id){return DATA.roles.filter(r=>r.reporta_a_id===id)}
-const AREAS=['todos',...new Set(DATA.roles.map(r=>r.area))];
+let ROLES = [];
+let rolesById = {};
+let AREAS = [];
+let obraActual = 'GENERAL';
+let currentView = 'org', currentRole = null, activeFilter = 'todos', searchTerm = '', prevView = 'org';
+
+// ══════════════════════════════════════════════════
+// INIT — leer ?obra= de URL y fetchear GAS
+// ══════════════════════════════════════════════════
+(async function init() {
+  const params = new URLSearchParams(window.location.search);
+  obraActual = params.get('obra') || 'GENERAL';
+
+  // Mostrar badge de obra en header si no es GENERAL
+  if (obraActual !== 'GENERAL') {
+    const badge = document.getElementById('hdr-obra');
+    badge.textContent = 'Obra: ' + obraActual;
+    badge.style.display = '';
+  }
+
+  try {
+    const url = GAS_URL + '?obra=' + encodeURIComponent(obraActual);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+
+    if (!data.ok) throw new Error(data.error || 'Error desconocido del servidor');
+
+    ROLES = data.roles;
+    ROLES.forEach(r => rolesById[r.id_rol] = r);
+    AREAS = ['todos', ...new Set(ROLES.map(r => r.area))];
+
+    // Ocultar loading, mostrar contenido
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('app-content').style.display = '';
+
+    buildSidebar();
+    buildOrg();
+
+  } catch (err) {
+    document.getElementById('loading-state').style.display = 'none';
+    const errEl = document.getElementById('error-state');
+    errEl.style.display = 'flex';
+    document.getElementById('error-msg').innerHTML =
+      'No se pudo cargar la hoja <strong>' + obraActual + '</strong>.<br>' +
+      'Verificá que el Web App esté publicado y la hoja exista.<br><br>' +
+      '<span style="color:var(--text-3);font-size:10px">' + err.message + '</span>';
+  }
+})();
+
+// ══ HELPERS ════════════════════════════════════════
+function getSubs(id) { return ROLES.filter(r => r.reporta_a_id === id) }
+
+// Badge de asignado: devuelve HTML del badge principal + indicador de extras
+function asignadoBadgeNode(r) {
+  if (!r.asignados || r.asignados.length === 0) {
+    return '<span class="org-node-asignado tbd">TBD</span>';
+  }
+  const extra = r.asignados.length > 1
+    ? `<div class="org-node-extra">+${r.asignados.length - 1} más</div>`
+    : '';
+  return `<span class="org-node-asignado assigned">${r.asignados[0]}</span>${extra}`;
+}
+
+// Chips de asignados para la vista detalle
+function asignadosChips(r) {
+  if (!r.asignados || r.asignados.length === 0) {
+    return '<span class="detail-asig-chip tbd">TBD — Sin asignar</span>';
+  }
+  return r.asignados.map(n =>
+    `<span class="detail-asig-chip assigned">${n}</span>`
+  ).join('');
+}
+
+// Badge compacto para sidebar y list-card
+function asignadoBadgeInline(r) {
+  if (!r.asignados || r.asignados.length === 0) {
+    return '<span class="nav-badge tbd">TBD</span>';
+  }
+  return '<span class="nav-badge assigned">✓</span>';
+}
 
 // ══ THEME ══════════════════════════════════════════
-function toggleTheme(){
-  const d=document.documentElement, dark=d.getAttribute('data-theme')==='dark';
-  d.setAttribute('data-theme',dark?'light':'dark');
-  document.getElementById('icon-sun').style.display=dark?'':'none';
-  document.getElementById('icon-moon').style.display=dark?'none':'';
+function toggleTheme() {
+  const d = document.documentElement, dark = d.getAttribute('data-theme') === 'dark';
+  d.setAttribute('data-theme', dark ? 'light' : 'dark');
+  document.getElementById('icon-sun').style.display = dark ? '' : 'none';
+  document.getElementById('icon-moon').style.display = dark ? 'none' : '';
 }
 
 // ══ SIDEBAR ════════════════════════════════════════
-function buildSidebar(){
-  document.getElementById('filter-chips').innerHTML=
-    AREAS.map(a=>`<div class="chip ${a==='todos'?'active':''}" onclick="filterArea('${a}')">${a}</div>`).join('');
+function buildSidebar() {
+  document.getElementById('filter-chips').innerHTML =
+    AREAS.map(a => `<div class="chip ${a === 'todos' ? 'active' : ''}" onclick="filterArea('${a}')">${a}</div>`).join('');
   renderNavList();
 }
-function filterArea(a){
-  activeFilter=a;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.textContent===a));
+
+function filterArea(a) {
+  activeFilter = a;
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.textContent === a));
   renderNavList();
 }
-function renderNavList(){
-  const filtered=DATA.roles.filter(r=>
-    (activeFilter==='todos'||r.area===activeFilter)&&
-    (!searchTerm||r.titulo.toLowerCase().includes(searchTerm.toLowerCase()))
+
+function renderNavList() {
+  const filtered = ROLES.filter(r =>
+    (activeFilter === 'todos' || r.area === activeFilter) &&
+    (!searchTerm || r.titulo.toLowerCase().includes(searchTerm.toLowerCase()))
   );
-  const nl=document.getElementById('nav-list');
-  if(!filtered.length){nl.innerHTML='<div class="no-results">Sin resultados</div>';return}
-  nl.innerHTML=filtered.map(r=>`
-    <div class="nav-item ${currentRole===r.id?'active':''}" onclick="selectRole('${r.id}')">
+  const nl = document.getElementById('nav-list');
+  if (!filtered.length) { nl.innerHTML = '<div class="no-results">Sin resultados</div>'; return; }
+  nl.innerHTML = filtered.map(r => `
+    <div class="nav-item ${currentRole === r.id_rol ? 'active' : ''}" onclick="selectRole('${r.id_rol}')">
       <div class="nav-dot"></div>
       <div class="nav-text">${r.titulo}<div class="nav-area">${r.area}</div></div>
+      ${asignadoBadgeInline(r)}
     </div>`).join('');
 }
 
 // ══ VIEWS ══════════════════════════════════════════
-function switchView(v){
-  currentView=v;
-  document.getElementById('btn-org').classList.toggle('active',v==='org');
-  document.getElementById('btn-list').classList.toggle('active',v==='list');
-  document.getElementById('view-org').style.display=v==='org'?'block':'none';
-  document.getElementById('view-list').style.display=v==='list'?'block':'none';
+function switchView(v) {
+  currentView = v;
+  document.getElementById('btn-org').classList.toggle('active', v === 'org');
+  document.getElementById('btn-list').classList.toggle('active', v === 'list');
+  document.getElementById('view-org').style.display = v === 'org' ? 'block' : 'none';
+  document.getElementById('view-list').style.display = v === 'list' ? 'block' : 'none';
   document.getElementById('view-detail').classList.remove('show');
-  if(v==='list')renderListView();
+  if (v === 'list') renderListView();
 }
 
 // ══ ORGANIGRAMA JERÁRQUICO ══════════════════════════
-// Renderiza el árbol recursivamente desde la raíz
-function buildOrg(){
-  const container=document.getElementById('view-org');
+function buildOrg() {
+  const container = document.getElementById('view-org');
+  const vl = () => `<div class="org-vline"><div class="org-vline-inner"></div></div>`;
 
-  // Helpers HTML
-  const vl=()=>`<div class="org-vline"><div class="org-vline-inner"></div></div>`;
-
-  const nodeHtml=(r)=>`
-    <div class="org-node ${currentRole===r.id?'active':''}" id="node-${r.id}" onclick="selectRole('${r.id}')">
+  const nodeHtml = (r) => `
+    <div class="org-node ${currentRole === r.id_rol ? 'active' : ''}" id="node-${r.id_rol}" onclick="selectRole('${r.id_rol}')">
       <div class="org-node-title">${r.titulo}</div>
       <div class="org-node-area">${r.area}</div>
+      ${asignadoBadgeNode(r)}
     </div>`;
 
-  // Render recursivo de un nodo y sus hijos
-  function renderSubtree(id, gap=12){
-    const r=rolesById[id];
-    const children=getSubs(id);
-    let html=`<div class="org-col" style="align-items:center;">`;
-    html+=nodeHtml(r);
-    if(children.length){
-      html+=vl();
-      if(children.length===1){
-        html+=renderSubtree(children[0].id,gap);
+  function renderSubtree(id, gap = 12) {
+    const r = rolesById[id];
+    if (!r) return '';
+    const children = getSubs(id);
+    let html = `<div class="org-col" style="align-items:center;">`;
+    html += nodeHtml(r);
+    if (children.length) {
+      html += vl();
+      if (children.length === 1) {
+        html += renderSubtree(children[0].id_rol, gap);
       } else {
-        // Línea horizontal conectora
-        html+=`<div style="display:flex;align-items:flex-start;gap:${gap}px;position:relative;">`;
-        // Barra horizontal encima de los hijos
-        html+=`<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 160px);height:1px;background:var(--border);"></div>`;
-        children.forEach(ch=>{
-          html+=`<div style="display:flex;flex-direction:column;align-items:center;">`;
-          html+=vl();
-          html+=renderSubtree(ch.id,gap);
-          html+=`</div>`;
+        html += `<div style="display:flex;align-items:flex-start;gap:${gap}px;position:relative;">`;
+        html += `<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 160px);height:1px;background:var(--border);"></div>`;
+        children.forEach(ch => {
+          html += `<div style="display:flex;flex-direction:column;align-items:center;">`;
+          html += vl();
+          html += renderSubtree(ch.id_rol, gap);
+          html += `</div>`;
         });
-        html+=`</div>`;
+        html += `</div>`;
       }
     }
-    html+=`</div>`;
+    html += `</div>`;
     return html;
   }
 
-  // Raíces del árbol: nodos que reportan a "gerente_operaciones" (externo)
-  const roots=DATA.roles.filter(r=>r.reporta_a_id==='gerente_operaciones');
+  const roots = ROLES.filter(r => r.reporta_a_id === 'gerente_operaciones');
+  const obraLabel = obraActual === 'GENERAL' ? `${ROLES.length} Puestos` : `Obra ${obraActual} · ${ROLES.length} Puestos`;
 
-  let html=`<div class="org-title">Estructura Organizacional &middot; ${DATA.roles.length} Puestos</div>`;
+  let html = `<div class="org-title">Estructura Organizacional &middot; ${obraLabel}</div>`;
 
-  // Nodo externo superior
-  html+=`<div style="display:flex;justify-content:center;margin-bottom:0;">
+  html += `<div style="display:flex;justify-content:center;margin-bottom:0;">
     <div class="org-root-node">Gerente de Operaciones</div>
   </div>`;
-  html+=vl();
+  html += vl();
 
-  if(roots.length===1){
-    html+=renderSubtree(roots[0].id, 10);
+  if (roots.length === 1) {
+    html += renderSubtree(roots[0].id_rol, 10);
   } else {
-    // Múltiples raíces (GP + Administrador de Contrato)
-    html+=`<div style="display:flex;gap:32px;justify-content:center;align-items:flex-start;position:relative;">`;
-    html+=`<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 200px);height:1px;background:var(--border);"></div>`;
-    roots.forEach(r=>{
-      html+=`<div style="display:flex;flex-direction:column;align-items:center;">`;
-      html+=vl();
-      html+=renderSubtree(r.id, 10);
-      html+=`</div>`;
+    html += `<div style="display:flex;gap:32px;justify-content:center;align-items:flex-start;position:relative;">`;
+    html += `<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 200px);height:1px;background:var(--border);"></div>`;
+    roots.forEach(r => {
+      html += `<div style="display:flex;flex-direction:column;align-items:center;">`;
+      html += vl();
+      html += renderSubtree(r.id_rol, 10);
+      html += `</div>`;
     });
-    html+=`</div>`;
+    html += `</div>`;
   }
 
-  container.innerHTML=html;
+  container.innerHTML = html;
 }
 
 // ══ LIST VIEW ══════════════════════════════════════
-function renderListView(){
-  const filtered=DATA.roles.filter(r=>
-    (activeFilter==='todos'||r.area===activeFilter)&&
-    (!searchTerm||r.titulo.toLowerCase().includes(searchTerm.toLowerCase()))
+function renderListView() {
+  const filtered = ROLES.filter(r =>
+    (activeFilter === 'todos' || r.area === activeFilter) &&
+    (!searchTerm || r.titulo.toLowerCase().includes(searchTerm.toLowerCase()))
   );
-  document.getElementById('list-cards').innerHTML=filtered.map(r=>`
-    <div class="list-card" onclick="selectRole('${r.id}')">
+  document.getElementById('list-cards').innerHTML = filtered.map(r => `
+    <div class="list-card" onclick="selectRole('${r.id_rol}')">
       <div class="lc-area">${r.area}</div>
       <div class="lc-title">${r.titulo}</div>
       <div class="lc-rep">→ ${r.reporta_a}</div>
-      <div class="lc-preview">${r.funciones[0].substring(0,100)}…</div>
+      <div class="lc-preview">${r.funciones[0] ? r.funciones[0].substring(0, 100) + '…' : ''}</div>
+      ${r.asignados && r.asignados.length > 0
+        ? `<span class="lc-badge assigned">${r.asignados.join(' · ')}</span>`
+        : '<span class="lc-badge tbd">Sin asignar</span>'}
     </div>`).join('');
 }
 
 // ══ DETAIL VIEW ════════════════════════════════════
-function selectRole(id){
-  currentRole=id;
-  const r=rolesById[id];
-  if(!r)return;
-  prevView=currentView!=='detail'?currentView:prevView;
+function selectRole(id) {
+  currentRole = id;
+  const r = rolesById[id];
+  if (!r) return;
+  prevView = currentView !== 'detail' ? currentView : prevView;
   renderNavList();
-  document.querySelectorAll('.org-node').forEach(n=>n.classList.toggle('active',n.id===`node-${id}`));
-  document.getElementById('view-org').style.display='none';
-  document.getElementById('view-list').style.display='none';
-  const det=document.getElementById('view-detail');
+  document.querySelectorAll('.org-node').forEach(n => n.classList.toggle('active', n.id === `node-${id}`));
+  document.getElementById('view-org').style.display = 'none';
+  document.getElementById('view-list').style.display = 'none';
+  const det = document.getElementById('view-detail');
   det.classList.add('show');
-  currentView='detail';
-  const subs=getSubs(id);
-  document.getElementById('detail-content').innerHTML=`
+  currentView = 'detail';
+  const subs = getSubs(id);
+
+  document.getElementById('detail-content').innerHTML = `
     <div class="detail-header">
       <div class="detail-area-tag">${r.area}</div>
       <div class="detail-titulo">${r.titulo}</div>
       <div class="detail-rep">Reporta a:&nbsp;
-        ${r.reporta_a_id!=='gerente_operaciones'
-          ?`<span class="detail-rep-link" onclick="selectRole('${r.reporta_a_id}')">${r.reporta_a}</span>`
-          :`<span>${r.reporta_a}</span>`}
+        ${r.reporta_a_id !== 'gerente_operaciones'
+          ? `<span class="detail-rep-link" onclick="selectRole('${r.reporta_a_id}')">${r.reporta_a}</span>`
+          : `<span>${r.reporta_a}</span>`}
+      </div>
+      <div class="detail-asignados">
+        <span class="detail-asig-label">Asignado:</span>
+        ${asignadosChips(r)}
       </div>
     </div>
     <div class="detail-sections">
       <div class="detail-section">
         <div class="sec-hdr"><div class="sec-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="sec-label">Funciones</span></div>
-        <ul class="sec-list">${r.funciones.map(f=>`<li>${f}</li>`).join('')}</ul>
+        <ul class="sec-list">${r.funciones.map(f => `<li>${f}</li>`).join('')}</ul>
       </div>
       <div class="detail-section">
         <div class="sec-hdr"><div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><span class="sec-label">Responsabilidades</span></div>
-        <ul class="sec-list">${r.responsabilidades.map(f=>`<li>${f}</li>`).join('')}</ul>
+        <ul class="sec-list">${r.responsabilidades.map(f => `<li>${f}</li>`).join('')}</ul>
       </div>
       <div class="detail-section">
         <div class="sec-hdr"><div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="sec-label">Entregables</span></div>
-        <ul class="sec-list">${r.entregables.map(f=>`<li>${f}</li>`).join('')}</ul>
+        <ul class="sec-list">${r.entregables.map(f => `<li>${f}</li>`).join('')}</ul>
       </div>
     </div>
-    ${subs.length?`
+    ${subs.length ? `
     <div class="detail-subs">
       <div class="subs-title">Reportan a este puesto</div>
-      <div class="subs-chips">${subs.map(s=>`<div class="sub-chip" onclick="selectRole('${s.id}')">${s.titulo}</div>`).join('')}</div>
-    </div>`:''}`;
-  det.scrollTop=0;
+      <div class="subs-chips">${subs.map(s => `<div class="sub-chip" onclick="selectRole('${s.id_rol}')">${s.titulo}</div>`).join('')}</div>
+    </div>` : ''}`;
+
+  det.scrollTop = 0;
 }
 
-function closeDetail(){
+function closeDetail() {
   document.getElementById('view-detail').classList.remove('show');
-  currentRole=null;currentView=prevView;
-  document.getElementById(`view-${prevView}`).style.display='block';
-  ['org','list'].forEach(v=>document.getElementById(`btn-${v}`).classList.toggle('active',v===prevView));
+  currentRole = null; currentView = prevView;
+  document.getElementById(`view-${prevView}`).style.display = 'block';
+  ['org', 'list'].forEach(v => document.getElementById(`btn-${v}`).classList.toggle('active', v === prevView));
   renderNavList();
-  document.querySelectorAll('.org-node').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.org-node').forEach(n => n.classList.remove('active'));
 }
 
 // ══ PDF EXPORT ══════════════════════════════════════
-function exportPDF(){
-  const now=new Date();
-  const fecha=now.toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'});
+function exportPDF() {
+  const now = new Date();
+  const fecha = now.toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' });
+  const obraLabel = obraActual === 'GENERAL' ? 'Estructura General' : 'Obra ' + obraActual;
 
-  // Carátula
-  document.getElementById('pdf-cover').innerHTML=`
+  document.getElementById('pdf-cover').innerHTML = `
     <div class="cover-accent-bar"></div>
     <div class="cover-body">
       <div class="cover-tag">Gerencia de Obras Electromecánicas</div>
@@ -644,8 +789,9 @@ function exportPDF(){
       <div class="cover-divider"></div>
       <div class="cover-meta">
         <strong>Documento:</strong> GOE-ORG-001<br>
-        <strong>Revisión:</strong> v01 — ${fecha}<br>
-        <strong>Puestos descriptos:</strong> ${DATA.roles.length}<br>
+        <strong>Revisión:</strong> v04 — ${fecha}<br>
+        <strong>Alcance:</strong> ${obraLabel}<br>
+        <strong>Puestos descriptos:</strong> ${ROLES.length}<br>
         <strong>Alcance:</strong> Proyectos Electromecánicos · Oil &amp; Gas<br>
         <strong>Marco normativo:</strong> PMI/PMBOK · ISO 9001 · ISO 45001 · Ley 19.587 · CCT Construcción
       </div>
@@ -655,56 +801,57 @@ function exportPDF(){
       <span class="cover-footer-red">Confidencial · Uso Interno</span>
     </div>`;
 
-  // Fichas
-  document.getElementById('pdf-body').innerHTML=DATA.roles.map((r,i)=>`
+  document.getElementById('pdf-body').innerHTML = ROLES.map((r, i) => {
+    const asignadoHtml = r.asignados && r.asignados.length > 0
+      ? r.asignados.map(n => `<span class="pdf-asig-chip assigned">${n}</span>`).join(' ')
+      : '<span class="pdf-asig-chip tbd">Sin asignar</span>';
+    return `
     <div class="pdf-page">
       <div class="pdf-page-hdr">
         <div class="pdf-area">${r.area}</div>
         <div class="pdf-titulo">${r.titulo}</div>
         <div class="pdf-rep">Reporta a: ${r.reporta_a}</div>
+        <div class="pdf-asignado">${asignadoHtml}</div>
       </div>
       <div class="pdf-cols">
         <div class="pdf-col">
           <div class="pdf-col-title"><span></span>Funciones</div>
-          <ul class="pdf-list">${r.funciones.map(f=>`<li>${f}</li>`).join('')}</ul>
+          <ul class="pdf-list">${r.funciones.map(f => `<li>${f}</li>`).join('')}</ul>
         </div>
         <div class="pdf-col">
           <div class="pdf-col-title"><span></span>Responsabilidades</div>
-          <ul class="pdf-list">${r.responsabilidades.map(f=>`<li>${f}</li>`).join('')}</ul>
+          <ul class="pdf-list">${r.responsabilidades.map(f => `<li>${f}</li>`).join('')}</ul>
         </div>
         <div class="pdf-col">
           <div class="pdf-col-title"><span></span>Entregables / Reportes</div>
-          <ul class="pdf-list">${r.entregables.map(f=>`<li>${f}</li>`).join('')}</ul>
+          <ul class="pdf-list">${r.entregables.map(f => `<li>${f}</li>`).join('')}</ul>
         </div>
       </div>
       <div class="pdf-page-footer">
         <span>GOE-ORG-001 · ${r.titulo}</span>
-        <span>Pág. ${i+2} / ${DATA.roles.length+1}</span>
+        <span>Pág. ${i + 2} / ${ROLES.length + 1}</span>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
-  const prev=document.documentElement.getAttribute('data-theme');
-  document.documentElement.setAttribute('data-theme','light');
-  setTimeout(()=>{
+  const prev = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', 'light');
+  setTimeout(() => {
     window.print();
-    setTimeout(()=>{
-      document.documentElement.setAttribute('data-theme',prev);
-      document.getElementById('pdf-cover').innerHTML='';
-      document.getElementById('pdf-body').innerHTML='';
-    },1200);
-  },200);
+    setTimeout(() => {
+      document.documentElement.setAttribute('data-theme', prev);
+      document.getElementById('pdf-cover').innerHTML = '';
+      document.getElementById('pdf-body').innerHTML = '';
+    }, 1200);
+  }, 200);
 }
 
 // ══ SEARCH ══════════════════════════════════════════
-document.getElementById('search').addEventListener('input',function(){
-  searchTerm=this.value.trim();
+document.getElementById('search').addEventListener('input', function () {
+  searchTerm = this.value.trim();
   renderNavList();
-  if(currentView==='list')renderListView();
+  if (currentView === 'list') renderListView();
 });
-
-// ══ INIT ════════════════════════════════════════════
-buildSidebar();
-buildOrg();
 </script>
 </body>
 </html>
