@@ -162,12 +162,18 @@ main::-webkit-scrollbar{width:6px}
 main::-webkit-scrollbar-thumb{background:var(--border)}
 
 /* ══ ORG VIEW ══════════════════════════════════ */
-#view-org{padding:24px 28px;min-height:100%;overflow-x:auto}
-.org-title{font-family:var(--font-m);font-size:10px;letter-spacing:3px;color:var(--text-3);text-transform:uppercase;margin-bottom:24px}
+#view-org{padding:24px 28px 0;height:calc(100vh - 60px);display:flex;flex-direction:column;box-sizing:border-box}
+.org-title{font-family:var(--font-m);font-size:10px;letter-spacing:3px;color:var(--text-3);text-transform:uppercase;margin-bottom:12px;flex-shrink:0}
+#org-panzoom-wrap{flex:1;overflow:hidden;position:relative;border:1px solid var(--border);background:var(--surface)}
+#org-panzoom-inner{display:inline-flex;padding:40px 60px 60px;cursor:grab;user-select:none;transform-origin:0 0}
+#org-panzoom-inner:active{cursor:grabbing}
+
+/* Hint pan/zoom */
+.org-hint{position:absolute;bottom:12px;right:14px;font-family:var(--font-m);font-size:9px;color:var(--text-3);letter-spacing:1px;pointer-events:none;opacity:.7}
 
 /* Nodos */
-.org-node{background:var(--node-bg);border:1px solid var(--node-border);padding:10px 13px;min-width:140px;max-width:175px;cursor:pointer;transition:all .18s;text-align:center;box-shadow:var(--shadow-sm);position:relative;user-select:none}
-.org-node:hover{border-color:var(--red-dim);box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.org-node{background:var(--node-bg);border:1px solid var(--node-border);padding:10px 13px;min-width:140px;max-width:175px;cursor:pointer;transition:border-color .18s,box-shadow .18s;text-align:center;box-shadow:var(--shadow-sm);position:relative;user-select:none}
+.org-node:hover{border-color:var(--red-dim);box-shadow:var(--shadow-md)}
 .org-node.active{border-color:var(--red);box-shadow:0 0 0 1px var(--red),var(--shadow-md)}
 .org-node.active::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:2px;background:var(--red)}
 .org-node-title{font-weight:600;font-size:12px;color:var(--text);line-height:1.3;margin-bottom:2px}
@@ -449,7 +455,7 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
         <svg id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg id="icon-moon" style="display:none" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
-      <span class="version">v04</span>
+      <span class="version">v05</span>
     </div>
   </header>
 
@@ -467,7 +473,12 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 
   <!-- MAIN -->
   <main id="main">
-    <div id="view-org"></div>
+    <div id="view-org">
+      <div id="org-panzoom-wrap">
+        <div id="org-panzoom-inner"></div>
+        <span class="org-hint">Scroll: zoom · Drag: pan · Doble click: reset</span>
+      </div>
+    </div>
     <div id="view-list"><div id="list-cards"></div></div>
     <div id="view-tabla"></div>
     <div id="view-detail">
@@ -484,10 +495,7 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 <div id="pdf-cover"></div>
 <div id="pdf-body"></div>
 
-<!-- PDF — solo visible en print -->
-<div id="pdf-cover"></div>
-<div id="pdf-body"></div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/panzoom/9.4.3/panzoom.min.js"></script>
 <script>
 const GAS_URL='https://script.google.com/macros/s/AKfycbxsJTP8o_F01Njtwk7Z2Oz3Z8OhNc__g9EbPGRzoP7DqfuarMr86LNpoIXlTsTJk6t4/exec';
 let ROLES=[],rolesById={},AREAS=[],obraActual='GENERAL',modoObra=false;
@@ -595,81 +603,115 @@ function switchView(v){
     const btn=document.getElementById('btn-'+x);
     if(btn)btn.classList.toggle('active',x===v);
     const el=document.getElementById('view-'+x);
-    if(el)el.style.display=x===v?'block':'none';
+    if(el)el.style.display=x===v?(x==='org'?'flex':'block'):'none';
   });
   document.getElementById('view-detail').classList.remove('show');
   if(v==='list')renderListView();
   if(v==='tabla')renderTablaView();
 }
 
-function buildOrg(){
-  const vl=()=>`<div class="org-vline"><div class="org-vline-inner"></div></div>`;
+let _panzoom = null; // instancia panzoom activa
 
-  // nodeHtml: recibe un role object (puede ser uno de los "extras" con titulo distinto)
-  const nodeHtml=(r,asignadoLabel='')=>`
+function buildOrg(){
+  const inner = document.getElementById('org-panzoom-inner');
+  const wrap  = document.getElementById('org-panzoom-wrap');
+
+  // -- Destruir instancia panzoom anterior si existe --
+  if(_panzoom){ _panzoom.dispose(); _panzoom=null; }
+
+  // -- Limpiar contenido anterior --
+  inner.innerHTML = '';
+
+  // -- Título con stats --
+  const nAsig = modoObra ? ROLES.filter(r=>r.asignados&&r.asignados.length>0).length : null;
+  const label = modoObra
+    ? `Obra ${obraActual} · ${ROLES.length} Puestos · ${nAsig} Asignados · ${ROLES.length-nAsig} Vacantes`
+    : `Estructura General · ${ROLES.length} Puestos`;
+  // El título va FUERA del inner (no se mueve con el pan)
+  let titleEl = document.getElementById('org-dyn-title');
+  if(!titleEl){
+    titleEl = document.createElement('div');
+    titleEl.id = 'org-dyn-title';
+    titleEl.className = 'org-title';
+    wrap.parentElement.insertBefore(titleEl, wrap);
+  }
+  titleEl.textContent = label;
+
+  // -- Helpers HTML --
+  const vl = () => `<div class="org-vline"><div class="org-vline-inner"></div></div>`;
+
+  const nodeHtml = (r, asignadoLabel='') => `
     <div class="org-node ${currentRole===r.id_rol?'active':''}" id="node-${r.id_rol}" onclick="selectRole('${r.id_rol}')">
       <div class="org-node-title">${r.titulo}</div>
       <div class="org-node-area">${r.area}</div>
-      ${modoObra?(asignadoLabel
-        ?`<span class="org-node-asignado assigned">${asignadoLabel}</span>`
-        :`<span class="org-node-asignado tbd">TBD</span>`)
-      :''}
+      ${modoObra ? (asignadoLabel
+        ? `<span class="org-node-asignado assigned">${asignadoLabel}</span>`
+        : `<span class="org-node-asignado tbd">TBD</span>`)
+      : ''}
     </div>`;
 
-  // Para un id_rol con múltiples instancias, genera N nodos apilados verticalmente
-  // cada uno con su título y asignado propio
   function nodesForId(id){
-    const r=rolesById[id]; if(!r)return '';
-    // instancias: si hay asignados, un nodo por asignado; sino, un nodo TBD
-    if(!modoObra || !r.asignados || r.asignados.length===0){
-      return nodeHtml(r,'');
-    }
+    const r = rolesById[id]; if(!r) return '';
+    if(!modoObra || !r.asignados || r.asignados.length===0) return nodeHtml(r,'');
     if(r.asignados.length===1){
-      // titulo puede venir de r.titulosExtra[0] si existe, sino r.titulo
-      const tit=r.titulosExtra&&r.titulosExtra[0]?r.titulosExtra[0]:r.titulo;
-      const rCopy=Object.assign({},r,{titulo:tit});
-      return nodeHtml(rCopy, r.asignados[0]);
+      const tit = r.titulosExtra&&r.titulosExtra[0] ? r.titulosExtra[0] : r.titulo;
+      return nodeHtml(Object.assign({},r,{titulo:tit}), r.asignados[0]);
     }
-    // Múltiples: apilar verticalmente
-    let h='<div style="display:flex;flex-direction:column;align-items:center;gap:6px">';
+    let h = '<div style="display:flex;flex-direction:column;align-items:center;gap:6px">';
     r.asignados.forEach((nombre,i)=>{
-      const tit=i===0?r.titulo:(r.titulosExtra&&r.titulosExtra[i-1]?r.titulosExtra[i-1]:r.titulo);
-      const rCopy=Object.assign({},r,{titulo:tit});
-      h+=nodeHtml(rCopy, nombre);
+      const tit = i===0 ? r.titulo : (r.titulosExtra&&r.titulosExtra[i-1] ? r.titulosExtra[i-1] : r.titulo);
+      h += nodeHtml(Object.assign({},r,{titulo:tit}), nombre);
     });
-    h+='</div>';
-    return h;
+    return h + '</div>';
   }
 
-  function sub(id,gap=12){
-    const r=rolesById[id]; if(!r)return '';
-    const ch=getSubs(id);
-    let h=`<div style="display:flex;flex-direction:column;align-items:center">${nodesForId(id)}`;
+  function sub(id, gap=12){
+    const r = rolesById[id]; if(!r) return '';
+    const ch = getSubs(id);
+    let h = `<div style="display:flex;flex-direction:column;align-items:center">${nodesForId(id)}`;
     if(ch.length){
-      h+=vl();
-      if(ch.length===1){h+=sub(ch[0].id_rol,gap);}
-      else{
-        h+=`<div style="display:flex;align-items:flex-start;gap:${gap}px;position:relative;">`;
-        h+=`<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 160px);height:1px;background:var(--border)"></div>`;
-        ch.forEach(c=>{h+=`<div style="display:flex;flex-direction:column;align-items:center">${vl()}${sub(c.id_rol,gap)}</div>`;});
-        h+=`</div>`;
+      h += vl();
+      if(ch.length===1){
+        h += sub(ch[0].id_rol, gap);
+      } else {
+        h += `<div style="display:flex;align-items:flex-start;gap:${gap}px;position:relative;">`;
+        h += `<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 160px);height:1px;background:var(--border)"></div>`;
+        ch.forEach(c=>{ h += `<div style="display:flex;flex-direction:column;align-items:center">${vl()}${sub(c.id_rol,gap)}</div>`; });
+        h += `</div>`;
       }
     }
-    return h+`</div>`;
+    return h + `</div>`;
   }
 
-  const roots=ROLES.filter(r=>r.reporta_a_id==='gerente_operaciones');
-  const label=modoObra?`Obra ${obraActual} - ${ROLES.length} Puestos`:`${ROLES.length} Puestos`;
-  let h=`<div class="org-title">Estructura Organizacional - ${label}</div>`;
-  h+=`<div style="display:flex;justify-content:center"><div class="org-root-node">Gerente de Operaciones</div></div>${vl()}`;
-  if(roots.length===1){h+=sub(roots[0].id_rol,10);}
-  else{
-    h+=`<div style="display:flex;gap:32px;justify-content:center;align-items:flex-start;position:relative;">`;
-    h+=`<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 200px);height:1px;background:var(--border)"></div>`;
-    roots.forEach(r=>{h+=`<div style="display:flex;flex-direction:column;align-items:center">${vl()}${sub(r.id_rol,10)}</div>`;});
-    h+=`</div>`;
+  // -- Construir árbol --
+  const roots = ROLES.filter(r=>r.reporta_a_id==='gerente_operaciones');
+  let h = `<div style="display:flex;flex-direction:column;align-items:center">`;
+  h += `<div class="org-root-node">Gerente de Operaciones</div>${vl()}`;
+  if(roots.length===1){
+    h += sub(roots[0].id_rol, 10);
+  } else {
+    h += `<div style="display:flex;gap:32px;justify-content:center;align-items:flex-start;position:relative;">`;
+    h += `<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 200px);height:1px;background:var(--border)"></div>`;
+    roots.forEach(r=>{ h += `<div style="display:flex;flex-direction:column;align-items:center">${vl()}${sub(r.id_rol,10)}</div>`; });
+    h += `</div>`;
   }
-  document.getElementById('view-org').innerHTML=h;
+  h += `</div>`;
+  inner.innerHTML = h;
+
+  // -- Inicializar panzoom --
+  _panzoom = Panzoom(inner, {
+    maxScale: 3,
+    minScale: 0.3,
+    step: 0.1,
+    contain: 'outside',
+    excludeClass: 'org-node',  // clicks en nodos no activan pan
+  });
+  // Zoom con rueda del mouse (solo bind una vez)
+  if(!wrap.dataset.panzoomBound){
+    wrap.addEventListener('wheel', (e)=>_panzoom.zoomWithWheel(e), {passive:true});
+    wrap.addEventListener('dblclick', ()=>_panzoom.reset({animate:true}));
+    wrap.dataset.panzoomBound = '1';
+  }
 }
 
 function renderListView(){
@@ -768,7 +810,7 @@ function exportPDF(){
       <div class="cover-divider"></div>
       <div class="cover-meta">
         <strong>Documento:</strong> GOE-ORG-001<br>
-        <strong>Revision:</strong> v04 - ${fecha}<br>
+        <strong>Revision:</strong> v05 - ${fecha}<br>
         <strong>Alcance:</strong> ${obraLabel}<br>
         <strong>Puestos:</strong> ${ROLES.length}<br>
         <strong>Marco normativo:</strong> PMI/PMBOK - ISO 9001 - ISO 45001 - Ley 19.587 - CCT Construccion
