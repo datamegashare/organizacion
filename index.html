@@ -497,6 +497,143 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 
 /* Ocultar en pantalla */
 #pdf-cover,#pdf-body{display:none}
+
+/* ══ OVERLAY SITIO NO DISPONIBLE ══════════════ */
+#overlay-nodisponible{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  flex-direction:column;align-items:center;justify-content:center;gap:20px;
+}
+#overlay-nodisponible.visible{display:flex}
+.nodisp-icon{width:56px;height:56px;background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center}
+.nodisp-icon svg{width:26px;height:26px;stroke:var(--text-3);fill:none;stroke-width:1.5}
+.nodisp-title{font-family:var(--font-d);font-size:28px;letter-spacing:3px;color:var(--text);text-align:center}
+.nodisp-msg{font-family:var(--font-m);font-size:11px;letter-spacing:1.5px;color:var(--text-3);
+  text-transform:uppercase;text-align:center}
+
+/* ══ DRAWER ENTREGABLES ════════════════════════ */
+#drawer-backdrop{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.35);
+}
+#drawer-backdrop.visible{display:block}
+
+#drawer-entregables{
+  position:fixed;top:0;right:0;bottom:0;z-index:201;
+  width:min(680px,92vw);
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  box-shadow:-6px 0 32px rgba(0,0,0,.14);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+#drawer-entregables.open{transform:translateX(0)}
+
+.drawer-hdr{
+  display:flex;align-items:center;gap:10px;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;background:var(--surface);
+}
+.drawer-hdr-icon{width:28px;height:28px;background:var(--red-light);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.drawer-hdr-icon svg{width:14px;height:14px;stroke:var(--red);fill:none;stroke-width:2}
+.drawer-hdr-title{font-family:var(--font-d);font-size:17px;letter-spacing:2px;color:var(--text);flex:1}
+.drawer-hdr-rol{font-family:var(--font-m);font-size:10px;color:var(--text-3);letter-spacing:1px;
+  text-transform:uppercase;margin-top:1px}
+.drawer-close{width:30px;height:30px;background:transparent;border:1px solid var(--border);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--text-3);transition:all .15s;flex-shrink:0}
+.drawer-close:hover{border-color:var(--red);color:var(--red)}
+.drawer-close svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+.drawer-body{flex:1;overflow-y:auto;padding:20px}
+.drawer-body::-webkit-scrollbar{width:4px}
+.drawer-body::-webkit-scrollbar-thumb{background:var(--border)}
+
+/* Tabla dentro del drawer */
+.ent-table-wrap{border:1px solid var(--border);overflow:hidden}
+.ent-table{width:100%;border-collapse:collapse;font-size:13px}
+.ent-table th{
+  background:var(--surface2);
+  font-family:var(--font-m);font-size:9px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-3);padding:9px 13px;
+  text-align:left;border-bottom:2px solid var(--border);
+  font-weight:400;
+}
+.ent-table td{
+  padding:11px 13px;border-bottom:1px solid var(--border);
+  color:var(--text-2);vertical-align:top;line-height:1.5;
+}
+.ent-table tbody tr:last-child td{border-bottom:none}
+.ent-table tbody tr:hover td{background:var(--surface2)}
+.ent-nombre{font-weight:500;color:var(--text);font-size:13px}
+.ent-tipo{
+  font-family:var(--font-m);font-size:10px;
+  padding:2px 8px;white-space:nowrap;
+  border:1px solid var(--border);color:var(--text-3);
+}
+.ent-empty{
+  padding:32px;text-align:center;
+  font-family:var(--font-m);font-size:11px;
+  color:var(--text-3);letter-spacing:1px;
+}
+
+/* Ícono ⊞ en header de card ENTREGABLES */
+.sec-hdr-btn{
+  margin-left:auto;
+  width:22px;height:22px;
+  background:transparent;border:1px solid var(--border);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--text-3);transition:all .15s;flex-shrink:0;
+}
+.sec-hdr-btn:hover{border-color:var(--red);color:var(--red)}
+.sec-hdr-btn:disabled{opacity:.35;cursor:not-allowed}
+.sec-hdr-btn:disabled:hover{border-color:var(--border);color:var(--text-3)}
+.sec-hdr-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ══ PDF — TABLA ENTREGABLES ══════════════════ */
+@media print {
+  .pdf-ent-section{
+    margin-top:6mm;
+    border:0.5pt solid #DDD;
+    page-break-inside:avoid;
+  }
+  .pdf-ent-title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:11pt;letter-spacing:1.5px;
+    color:#111;padding:3mm 4mm;
+    border-bottom:0.5pt solid #EEE;
+    display:flex;align-items:center;gap:2mm;
+  }
+  .pdf-ent-title span{
+    display:inline-block;width:2mm;height:6pt;
+    background:#CC0000;margin-right:2mm;vertical-align:middle;
+  }
+  .pdf-ent-table{width:100%;border-collapse:collapse;font-size:7.5pt}
+  .pdf-ent-table th{
+    background:#F5F5F5;
+    font-family:'DM Mono',monospace;font-size:7pt;
+    letter-spacing:1px;text-transform:uppercase;color:#888;
+    padding:2mm 3mm;text-align:left;
+    border-bottom:0.5pt solid #DDD;font-weight:400;
+  }
+  .pdf-ent-table td{
+    padding:2mm 3mm;border-bottom:0.5pt solid #EEE;
+    font-family:'DM Sans',sans-serif;color:#333;
+    vertical-align:top;line-height:1.45;
+  }
+  .pdf-ent-table tbody tr:last-child td{border-bottom:none}
+  .pdf-ent-tipo{
+    font-family:'DM Mono',monospace;font-size:6.5pt;
+    color:#CC0000;white-space:nowrap;
+  }
+  .pdf-ent-nombre{font-weight:500;color:#111}
+}
 </style>
 </head>
 <body>
@@ -535,7 +672,7 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
         <svg id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg id="icon-moon" style="display:none" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
-      <span class="version">v05r2</span>
+      <span class="version">v06</span>
     </div>
   </header>
 
@@ -579,6 +716,35 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 <div id="pdf-cover"></div>
 <div id="pdf-body"></div>
 
+<!-- Overlay sitio no disponible -->
+<div id="overlay-nodisponible">
+  <div class="nodisp-icon">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  </div>
+  <div class="nodisp-title">SITIO NO DISPONIBLE</div>
+  <div class="nodisp-msg">Información no disponible por el momento</div>
+</div>
+
+<!-- Drawer backdrop -->
+<div id="drawer-backdrop" onclick="closeDrawer()"></div>
+
+<!-- Drawer entregables -->
+<div id="drawer-entregables">
+  <div class="drawer-hdr">
+    <div class="drawer-hdr-icon">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    </div>
+    <div>
+      <div class="drawer-hdr-title">Entregables / Reportes</div>
+      <div class="drawer-hdr-rol" id="drawer-rol-label"></div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
 <script src="https://unpkg.com/panzoom@9.4.3/dist/panzoom.min.js"></script>
 <script>
 const GAS_URL='https://script.google.com/macros/s/AKfycbxsJTP8o_F01Njtwk7Z2Oz3Z8OhNc__g9EbPGRzoP7DqfuarMr86LNpoIXlTsTJk6t4/exec';
@@ -599,6 +765,10 @@ async function fetchData(){
   const res=await fetch(GAS_URL+'?obra='+encodeURIComponent(obraActual));
   if(!res.ok)throw new Error('HTTP '+res.status);
   const d=await res.json();
+  if(d.sitioNoDisponible){
+    document.getElementById('overlay-nodisponible').classList.add('visible');
+    throw new Error('sitio_no_disponible');
+  }
   if(!d.ok)throw new Error(d.error||'Error desconocido');
   return d.roles;
 }
@@ -621,8 +791,10 @@ function initState(){
     ROLES=await fetchData(); initState();
     buildSidebar(); buildOrg();
   }catch(err){
-    console.error(err);
-    alert('Error al cargar: '+err.message);
+    if(err.message!=='sitio_no_disponible'){
+      console.error(err);
+      alert('Error al cargar: '+err.message);
+    }
   }finally{
     hideLoading();
   }
@@ -890,7 +1062,7 @@ function selectRole(id){
     <div class="detail-sections">
       <div class="detail-section"><div class="sec-hdr"><div class="sec-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="sec-label">Funciones</span></div><ul class="sec-list">${r.funciones.map(f=>`<li>${f}</li>`).join('')}</ul></div>
       <div class="detail-section"><div class="sec-hdr"><div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><span class="sec-label">Responsabilidades</span></div><ul class="sec-list">${r.responsabilidades.map(f=>`<li>${f}</li>`).join('')}</ul></div>
-      <div class="detail-section"><div class="sec-hdr"><div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="sec-label">Entregables</span></div><ul class="sec-list">${r.entregables.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+      <div class="detail-section"><div class="sec-hdr"><div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="sec-label">Entregables</span>${r.entregables&&r.entregables.length?`<button class="sec-hdr-btn" onclick="openDrawer('${r.id_rol}')" title="Ver detalle de entregables"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>`:`<button class="sec-hdr-btn" disabled title="Sin entregables registrados"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>`}</div><ul class="sec-list">${(r.entregables||[]).map(f=>`<li>${typeof f==='object'?f.nombre:f}</li>`).join('')}</ul></div>
     </div>
     ${subs.length?`<div class="detail-subs"><div class="subs-title">Reportan a este puesto</div><div class="subs-chips">${subs.map(s=>`<div class="sub-chip" onclick="selectRole('${s.id_rol}')">${s.titulo}</div>`).join('')}</div></div>`:''}`;
   det.scrollTop=0;
@@ -919,7 +1091,7 @@ function exportPDF(){
       <div class="cover-divider"></div>
       <div class="cover-meta">
         <strong>Documento:</strong> GOE-ORG-001<br>
-        <strong>Revision:</strong> v05r2 - ${fecha}<br>
+        <strong>Revision:</strong> v06 - ${fecha}<br>
         <strong>Alcance:</strong> ${obraLabel}<br>
         <strong>Puestos:</strong> ${ROLES.length}<br>
         <strong>Marco normativo:</strong> PMI/PMBOK - ISO 9001 - ISO 45001 - Ley 19.587 - CCT Construccion
@@ -933,6 +1105,22 @@ function exportPDF(){
     const asigHtml=modoObra?(r.asignados&&r.asignados.length
       ?r.asignados.map(n=>`<span class="pdf-asig-chip assigned">${n}</span>`).join(' ')
       :'<span class="pdf-asig-chip tbd">Sin asignar</span>'):'';
+    const ents=r.entregables||[];
+    const entNombres=ents.map(e=>typeof e==='object'?e.nombre:e);
+    const entTabla=ents.length&&typeof ents[0]==='object'
+      ?`<div class="pdf-ent-section">
+          <div class="pdf-ent-title"><span></span>Entregables / Reportes</div>
+          <table class="pdf-ent-table">
+            <thead><tr><th>Entregable</th><th>Tipo</th><th>Qué contiene / Para qué sirve</th><th>De dónde vienen los datos</th></tr></thead>
+            <tbody>${ents.map(e=>`<tr>
+              <td class="pdf-ent-nombre">${e.nombre||''}</td>
+              <td class="pdf-ent-tipo">${e.tipo||''}</td>
+              <td>${e.descripcion||''}</td>
+              <td>${e.fuente||''}</td>
+            </tr>`).join('')}</tbody>
+          </table>
+        </div>`
+      :'';
     return `<div class="pdf-page">
       <div class="pdf-page-hdr">
         <div class="pdf-area">${r.area}</div>
@@ -943,14 +1131,55 @@ function exportPDF(){
       <div class="pdf-cols">
         <div class="pdf-col"><div class="pdf-col-title"><span></span>Funciones</div><ul class="pdf-list">${r.funciones.map(f=>`<li>${f}</li>`).join('')}</ul></div>
         <div class="pdf-col"><div class="pdf-col-title"><span></span>Responsabilidades</div><ul class="pdf-list">${r.responsabilidades.map(f=>`<li>${f}</li>`).join('')}</ul></div>
-        <div class="pdf-col"><div class="pdf-col-title"><span></span>Entregables / Reportes</div><ul class="pdf-list">${r.entregables.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+        <div class="pdf-col"><div class="pdf-col-title"><span></span>Entregables / Reportes</div><ul class="pdf-list">${entNombres.map(f=>`<li>${f}</li>`).join('')}</ul></div>
       </div>
+      ${entTabla}
       <div class="pdf-page-footer"><span>GOE-ORG-001 - ${r.titulo}</span><span>Pag. ${i+2} / ${ROLES.length+1}</span></div>
     </div>`;
   }).join('');
   const prev=document.documentElement.getAttribute('data-theme');
   document.documentElement.setAttribute('data-theme','light');
   setTimeout(()=>{window.print();setTimeout(()=>{document.documentElement.setAttribute('data-theme',prev);document.getElementById('pdf-cover').innerHTML='';document.getElementById('pdf-body').innerHTML='';},1200);},200);
+}
+
+// ══ DRAWER ENTREGABLES ══════════════════════════
+function openDrawer(idRol){
+  const r=rolesById[idRol]; if(!r)return;
+  document.getElementById('drawer-rol-label').textContent=r.titulo;
+  const ents=r.entregables||[];
+  const body=document.getElementById('drawer-body');
+  if(!ents.length){
+    body.innerHTML=`<div class="ent-empty">Sin entregables registrados para este puesto.</div>`;
+  } else {
+    const rows=ents.map(e=>`
+      <tr>
+        <td><div class="ent-nombre">${e.nombre||''}</div></td>
+        <td><span class="ent-tipo">${e.tipo||''}</span></td>
+        <td>${e.descripcion||''}</td>
+        <td>${e.fuente||''}</td>
+      </tr>`).join('');
+    body.innerHTML=`
+      <div class="ent-table-wrap">
+        <table class="ent-table">
+          <thead><tr><th>Entregable</th><th>Tipo</th><th>Qué contiene / Para qué sirve</th><th>De dónde vienen los datos</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+  document.getElementById('drawer-backdrop').classList.add('visible');
+  document.getElementById('drawer-entregables').classList.add('open');
+  // Cerrar con ESC
+  document._drawerKeyHandler=function(e){if(e.key==='Escape')closeDrawer();};
+  document.addEventListener('keydown',document._drawerKeyHandler);
+}
+
+function closeDrawer(){
+  document.getElementById('drawer-backdrop').classList.remove('visible');
+  document.getElementById('drawer-entregables').classList.remove('open');
+  if(document._drawerKeyHandler){
+    document.removeEventListener('keydown',document._drawerKeyHandler);
+    delete document._drawerKeyHandler;
+  }
 }
 
 document.getElementById('search').addEventListener('input',function(){
