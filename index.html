@@ -171,6 +171,35 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 /* Hint pan/zoom */
 .org-hint{position:absolute;bottom:12px;right:14px;font-family:var(--font-m);font-size:9px;color:var(--text-3);letter-spacing:1px;pointer-events:none;opacity:.7}
 
+/* ── Loading overlay ── */
+#org-loading{
+  display:none;
+  position:absolute;
+  inset:0;
+  background:var(--surface);
+  z-index:10;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+}
+#org-loading.visible{ display:flex }
+.org-spinner{
+  width:36px;height:36px;
+  border:3px solid var(--border);
+  border-top-color:var(--red);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.org-loading-label{
+  font-family:var(--font-m);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+
 /* Nodos */
 .org-node{background:var(--node-bg);border:1px solid var(--node-border);padding:10px 13px;min-width:140px;max-width:175px;cursor:pointer;transition:border-color .18s,box-shadow .18s;text-align:center;box-shadow:var(--shadow-sm);position:relative;user-select:none}
 .org-node:hover{border-color:var(--red-dim);box-shadow:var(--shadow-md)}
@@ -506,7 +535,7 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
         <svg id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg id="icon-moon" style="display:none" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
-      <span class="version">v05r1</span>
+      <span class="version">v05r2</span>
     </div>
   </header>
 
@@ -526,6 +555,10 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
   <main id="main">
     <div id="view-org">
       <div id="org-panzoom-wrap">
+        <div id="org-loading">
+          <div class="org-spinner"></div>
+          <div class="org-loading-label">Cargando estructura...</div>
+        </div>
         <div id="org-panzoom-inner"></div>
         <span class="org-hint">Scroll: zoom · Drag: pan · Doble click: reset</span>
       </div>
@@ -553,6 +586,15 @@ let ROLES=[],rolesById={},AREAS=[],obraActual='GENERAL',modoObra=false;
 let currentView='org',currentRole=null,activeFilter='todos',searchTerm='',prevView='org';
 const VIEWS=['org','list','tabla'];
 
+function showLoading(msg='Cargando estructura...'){
+  const el=document.getElementById('org-loading');
+  el.querySelector('.org-loading-label').textContent=msg;
+  el.classList.add('visible');
+}
+function hideLoading(){
+  document.getElementById('org-loading').classList.remove('visible');
+}
+
 async function fetchData(){
   const res=await fetch(GAS_URL+'?obra='+encodeURIComponent(obraActual));
   if(!res.ok)throw new Error('HTTP '+res.status);
@@ -574,18 +616,22 @@ function initState(){
     b.textContent='Obra: '+obraActual; b.style.display='';
     document.getElementById('btn-tabla').style.display='';
   }
+  showLoading('Cargando estructura...');
   try{
     ROLES=await fetchData(); initState();
     buildSidebar(); buildOrg();
   }catch(err){
     console.error(err);
     alert('Error al cargar: '+err.message);
+  }finally{
+    hideLoading();
   }
 })();
 
 async function refreshData(){
   const btn=document.getElementById('btn-refresh');
   btn.classList.add('spinning'); btn.disabled=true;
+  showLoading('Actualizando...');
   try{
     ROLES=await fetchData(); initState(); buildSidebar();
     if(currentView==='org')buildOrg();
@@ -593,7 +639,10 @@ async function refreshData(){
     else if(currentView==='tabla')renderTablaView();
     else if(currentView==='detail'&&currentRole)selectRole(currentRole);
   }catch(err){alert('Error al actualizar: '+err.message);}
-  finally{btn.classList.remove('spinning');btn.disabled=false;}
+  finally{
+    btn.classList.remove('spinning'); btn.disabled=false;
+    hideLoading();
+  }
 }
 
 function getSubs(id){return ROLES.filter(r=>r.reporta_a_id===id)}
@@ -870,7 +919,7 @@ function exportPDF(){
       <div class="cover-divider"></div>
       <div class="cover-meta">
         <strong>Documento:</strong> GOE-ORG-001<br>
-        <strong>Revision:</strong> v05r1 - ${fecha}<br>
+        <strong>Revision:</strong> v05r2 - ${fecha}<br>
         <strong>Alcance:</strong> ${obraLabel}<br>
         <strong>Puestos:</strong> ${ROLES.length}<br>
         <strong>Marco normativo:</strong> PMI/PMBOK - ISO 9001 - ISO 45001 - Ley 19.587 - CCT Construccion
