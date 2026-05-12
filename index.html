@@ -495,7 +495,7 @@ main::-webkit-scrollbar-thumb{background:var(--border)}
 <div id="pdf-cover"></div>
 <div id="pdf-body"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/panzoom/9.4.3/panzoom.min.js"></script>
+<script src="https://unpkg.com/panzoom@9.4.3/dist/panzoom.min.js"></script>
 <script>
 const GAS_URL='https://script.google.com/macros/s/AKfycbxsJTP8o_F01Njtwk7Z2Oz3Z8OhNc__g9EbPGRzoP7DqfuarMr86LNpoIXlTsTJk6t4/exec';
 let ROLES=[],rolesById={},AREAS=[],obraActual='GENERAL',modoObra=false;
@@ -698,18 +698,23 @@ function buildOrg(){
   h += `</div>`;
   inner.innerHTML = h;
 
-  // -- Inicializar panzoom --
-  _panzoom = Panzoom(inner, {
-    maxScale: 3,
-    minScale: 0.3,
-    step: 0.1,
-    contain: 'outside',
-    excludeClass: 'org-node',  // clicks en nodos no activan pan
+  // -- Inicializar panzoom (anvaka/panzoom) --
+  _panzoom = panzoom(inner, {
+    maxZoom: 3,
+    minZoom: 0.3,
+    zoomSpeed: 0.065,
+    // Excluir clicks sobre nodos para no activar pan
+    beforeMouseDown: function(e){
+      const onNode = e.target.closest('.org-node');
+      return !!onNode; // true = ignorar (no panear)
+    }
   });
-  // Zoom con rueda del mouse (solo bind una vez)
+  // Doble click sobre el wrapper: reset posición y zoom
   if(!wrap.dataset.panzoomBound){
-    wrap.addEventListener('wheel', (e)=>_panzoom.zoomWithWheel(e), {passive:true});
-    wrap.addEventListener('dblclick', ()=>_panzoom.reset({animate:true}));
+    wrap.addEventListener('dblclick', ()=>{
+      _panzoom.moveTo(0, 0);
+      _panzoom.zoomAbs(0, 0, 1);
+    });
     wrap.dataset.panzoomBound = '1';
   }
 }
